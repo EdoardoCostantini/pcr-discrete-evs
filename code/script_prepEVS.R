@@ -811,165 +811,164 @@
 var_types <- list(
   # Binary variables
   bin = paste0("v",
-                c(
-                  # (not) mentioned
-                  9:19,
-                  22:26,
-                  40:45,
-                  85:95,
-                  # yes / no
-                  21,
-                  57:61,
-                  112,
-                  227,
-                  259,
-                  260,
-                  230,
-                  232,
-                  # man woman
-                  225,
-                  # trust no trust
-                  31,
-                  # Agree disagree
-                  71
-                )),
+               c(
+                 # (not) mentioned
+                 9:19,
+                 22:26,
+                 40:45,
+                 85:95,
+                 # yes / no
+                 21,
+                 57:61,
+                 112,
+                 227,
+                 259,
+                 260,
+                 230,
+                 232,
+                 # man woman
+                 225,
+                 # trust no trust
+                 31,
+                 # Agree disagree
+                 71
+               )),
   # Categorical variables
   cat = c("mode",
-           "country",
-           paste0("v",
-                  c(
-                    # Religious denomination
-                    "52_r",
-                    # Frequency of attendance (7 k)
-                    54, 55,
-                    # Consider yourself (3k)
-                    56,
-                    # statements close to beliefs (4 k)
-                    62,
-                    # how often pray
-                    64,
-                    # agree disagree (4 k)
-                    72:79,
-                    # agree disagree (5 k)
-                    80:84,
-                    # Might have done it (3 k)
-                    98:101,
-                    # Which of these most important (4 k)
-                    108:109,
-                    110:111,
-                    # good, bad, do not mind
-                    113:114,
-                    # Preference among two options (with residual category)
-                    204,
-                    # Country of birth
-                    "228b_r",
-                    "231b_r",
-                    "233b_r",
-                    # marital status (6 k)
-                    234,
-                    # living with parent
-                    238,
-                    # educational level respondent
-                    "243_ISCED_1",
-                    # Employment
-                    244,
-                    # education level father
-                    "262_ISCED_1",
-                    # educational level mother
-                    "263_ISCED_1",
-                    # Job / profession respondent
-                    "246_egp", # keep
-                    # Income
-                    261,
-                    # When you were 14
-                    264:274,
-                    # Region of interview,
-                    "275b_N1"
-                  ))
+          "country",
+          paste0("v",
+                 c(
+                   # Religious denomination
+                   "52_r",
+                   # Frequency of attendance (7 k)
+                   54, 55,
+                   # Consider yourself (3k)
+                   56,
+                   # statements close to beliefs (4 k)
+                   62,
+                   # how often pray
+                   64,
+                   # agree disagree (4 k)
+                   72:79,
+                   # agree disagree (5 k)
+                   80:84,
+                   # Might have done it (3 k)
+                   98:101,
+                   # Which of these most important (4 k)
+                   108:109,
+                   110:111,
+                   # good, bad, do not mind
+                   113:114,
+                   # Preference among two options (with residual category)
+                   204,
+                   # Country of birth
+                   "228b_r",
+                   "231b_r",
+                   "233b_r",
+                   # marital status (6 k)
+                   234,
+                   # living with parent
+                   238,
+                   # educational level respondent
+                   "243_ISCED_1",
+                   # Employment
+                   244,
+                   # education level father
+                   "262_ISCED_1",
+                   # educational level mother
+                   "263_ISCED_1",
+                   # Job / profession respondent
+                   "246_egp", # keep
+                   # Income
+                   261,
+                   # When you were 14
+                   264:274,
+                   # Region of interview,
+                   "275b_N1"
+                 ))
   ),
 
   # Ordinal variables
-  ord = c("age",
-           paste0("v", c(
-             # important in life (4 k)
-             1:6,
-             # how happy (4 k)
-             7,
-             # state of health (4 k)
-             8,
-             # Trust level (4 k)
-             32:37,
-             # control over life (10 k)
-             38,
-             # satisfied with life (10 k)
-             39,
-             # agree disagree with statements (5 k)
-             46:50,
-             # importance of god in life (10 k)
-             63,
-             # succesful partnership
-             65:70,
-             # very somewhat (4 k)
-             97,
-             # place your views on this scale (10 k)
-             102:107,
-             # Confidence in (4 k)
-             115:132,
-             # Essential to democracy (10 k)
-             133:144,
-             # very good, fairly good, fairly bad or very bad (10 k)
-             145:148,
-             # justified, never be justified, or something in between (10 k)
-             149:163,
-             # how close you feel to (4 k)
-             164:168,
-             # proud of nationality (4 k)
-             170,
-             # how often (3 k)
-             171:173,
-             # Left/right
-             "174_LR", "175_LR",
-             # how often in country's elections (4 k)
-             176:183,
-             # immigration (5 k)
-             184,
-             # immigration (10 k)
-             185:188,
-             # important (4 k)
-             189:197,
-             # important (10 k)
-             198,
-             # agree or disagree with this statement (5 k)
-             199:203,
-             # government should or should not (4 k)
-             205:207,
-             # how often you follow politics (5 k)
-             208:211,
-             # feel concerned about the living conditions of (5 k)
-             212:220,
-             # What should a society provide?
-             221:224,
-             # years completed education
-             242,
-             # Duration of interview
-             "279d_r",
-             # Interest in iterview
-             280,
-             # Size of town interview
-             "276_r"
-           )
-           )
+  ord = paste0("v", c(
+    # important in life (4 k)
+    1:6,
+    # how happy (4 k)
+    7,
+    # state of health (4 k)
+    8,
+    # Trust level (4 k)
+    32:37,
+    # control over life (10 k)
+    38,
+    # satisfied with life (10 k)
+    39,
+    # agree disagree with statements (5 k)
+    46:50,
+    # importance of god in life (10 k)
+    63,
+    # succesful partnership
+    65:70,
+    # very somewhat (4 k)
+    97,
+    # place your views on this scale (10 k)
+    102:107,
+    # Confidence in (4 k)
+    115:132,
+    # Essential to democracy (10 k)
+    133:144,
+    # very good, fairly good, fairly bad or very bad (10 k)
+    145:148,
+    # justified, never be justified, or something in between (10 k)
+    149:163,
+    # how close you feel to (4 k)
+    164:168,
+    # proud of nationality (4 k)
+    170,
+    # how often (3 k)
+    171:173,
+    # Left/right
+    "174_LR", "175_LR",
+    # how often in country's elections (4 k)
+    176:183,
+    # immigration (5 k)
+    184,
+    # immigration (10 k)
+    185:188,
+    # important (4 k)
+    189:197,
+    # important (10 k)
+    198,
+    # agree or disagree with this statement (5 k)
+    199:203,
+    # government should or should not (4 k)
+    205:207,
+    # how often you follow politics (5 k)
+    208:211,
+    # feel concerned about the living conditions of (5 k)
+    212:220,
+    # What should a society provide?
+    221:224,
+    # years completed education
+    242,
+    # Duration of interview
+    "279d_r",
+    # Interest in iterview
+    280,
+    # Size of town interview
+    "276_r"
+  )
   ),
 
   # count
   cnts = paste0("v",
-                 c(
-                   # Number of children
-                   "239_r",
-                   # People in household
-                   240
-                 )
-  )
+                c(
+                  # Number of children
+                  "239_r",
+                  # People in household
+                  240
+                )
+  ),
+  num = "age"
 )
 
 # Check all variables have measurement level defined
