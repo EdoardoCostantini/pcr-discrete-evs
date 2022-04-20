@@ -17,9 +17,7 @@ extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
 # Body --------------------------------------------------------------------
   # Define indexing objects for variable types
   dt_quanti <- dt[, index_cont]
-  dt_quali <- as.data.frame(
-    lapply(dt[, index_disc], factor)
-  )
+  dt_quali  <- dt[, index_disc]
 
   # Compute the max number of dimensions
   nVcat <- ncol(dt_quali)
@@ -34,7 +32,7 @@ extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
   }
   if(ncol(dt_quanti) != 0){
     pcamix <- PCAmix(X.quanti = dt_quanti,
-                     X.quali = dt_quali,
+                     X.quali  = dt_quali,
                      rename.level = TRUE,
                      ndim = maxdim, graph = FALSE)
   }
