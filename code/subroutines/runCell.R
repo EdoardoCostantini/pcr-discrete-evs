@@ -53,10 +53,54 @@ runCell <- function(cond,
 
 # Analysis ----------------------------------------------------------------
 
-  # PCAmix continuous + categorical
-  extractPCAmix(dt = dt_mix[, -dv_index],
-                index_cont = c(var_types$bin, var_types$ord, var_types$cnts),
-                index_disc = var_types$cat)
+  # continuous + categorical (PCAmix)
+  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
+                           index_cont = c(var_types$bin,
+                                          var_types$ord,
+                                          var_types$cnts,
+                                          var_types$num),
+                           index_disc = var_types$cat)
+
+  # continuous + categorical (dummy)
+  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
+                           index_cont = c(var_types$bin,
+                                          var_types$ord,
+                                          var_types$cnts,
+                                          var_types$num),
+                           index_disc = var_types$cat)
+
+  # continuous + categorical (disjunction)
+  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
+                           index_cont = c(var_types$bin,
+                                          var_types$ord,
+                                          var_types$cnts,
+                                          var_types$num),
+                           index_disc = var_types$cat)
+
+  # all categorical (PCAmix)
+  pcs_mca <- extractPCAmix(dt = dt_cat[, -dv_index],
+                           index_cont = var_types$num,
+                           index_disc = c(var_types$bin,
+                                          var_types$ord,
+                                          var_types$cnts,
+                                          var_types$cat))
+
+  # all categorical (dummy)
+  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
+                           index_cont = c(var_types$bin,
+                                          var_types$ord,
+                                          var_types$cnts,
+                                          var_types$num),
+                           index_disc = var_types$cat)
+
+  # all categorical (disjunction)
+  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
+                           index_cont = c(var_types$bin,
+                                          var_types$ord,
+                                          var_types$cnts,
+                                          var_types$num),
+                           index_disc = var_types$cat)
+
 
   # PCA Original
   pcs_orig <- extractPCs(dt = dat_orig,
