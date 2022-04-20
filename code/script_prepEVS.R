@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-19
+# Modified: 2022-04-20
 
 # Environment ------------------------------------------------------------------
 
@@ -375,7 +375,7 @@
   # Check that even if v20a == mentioned, answers to 9 to 19 are don't know
   check_Q4_v20a <- EVS2017 %>%
     filter(v20a == "mentioned") %>%
-    select((paste0("v", 9:19)))
+    select(paste0("v", 9:19))
 
   # Are there rows for which the condition is not met?
   index <- which(rowSums(check_Q4_v20a != "dont know") != 0)
@@ -764,7 +764,7 @@
 
   # Drop other employment related questions not needed
   EVS2017 <- dropVars(EVS2017,
-                      paste0("v", c(249, 253:254, 256:259, "255_egp"))
+                      paste0("v", c(249, 253:254, 256:258, "255_egp"))
   )
 
 # > date of interview ---------------------------------------------------------------------
@@ -784,12 +784,19 @@
   )
 
   # Recode "item not included" to missing value
-  EVS2017$v279d_r <- recode_factor(EVS2017$v279d_r, "item not included" = "NA")
+  EVS2017 <- EVS2017 %>%
+    mutate(v279d_r = replace(x      = v279d_r,
+                             list   = v279d_r == "item not included",
+                             values = NA))
 
 # > interest in interview ------------------------------------------------------
 
   # Recode not included to missing value
-  EVS2017$v280 <- recode_factor(EVS2017$v280, "item not included" = "NA")
+  EVS2017 <- EVS2017 %>%
+    mutate(v280 = replace(x      = v280,
+                          list   = v280 == "item not included",
+                          values = NA))
+  # EVS2017$v280 <- recode_factor(EVS2017$v280, "item not included" = "NA")
 
 # > language of interview ------------------------------------------------------
 
@@ -801,172 +808,178 @@
 
 # Step 4: Variable types -------------------------------------------------------
 
-# Binary variables
-bin <- paste0("v",
-              c(
-                # (not) mentioned
-                9:19,
-                22:26,
-                40:45,
-                85:95,
-                # yes / no
-                21,
-                57:61,
-                112,
-                227,
-                259,
-                260,
-                230,
-                232,
-                # man woman
-                225,
-                # trust no trust
-                31,
-                # Agree disagree
-                71
-              ))
-# Categorical variables
-cat <- c("mode",
-         "country",
-         paste0("v",
+var_types <- list(
+  # Binary variables
+  bin = paste0("v",
                 c(
-                  # Religious denomination
-                  "52_r",
-                  # Frequency of attendance (7 k)
-                  54, 55,
-                  # Consider yourself (3k)
-                  56,
-                  # statements close to beliefs (4 k)
-                  62,
-                  # how often pray
-                  64,
-                  # agree disagree (4 k)
-                  72:79,
-                  # agree disagree (5 k)
-                  80:84,
-                  # Might have done it (3 k)
-                  98:101,
-                  # Which of these most important (4 k)
-                  108:109,
-                  110:111,
-                  # good, bad, do not mind
-                  113:114,
-                  # Preference among two options (with residual category)
-                  204,
-                  # Country of birth
-                  "228b_r",
-                  "231b_r",
-                  "233b_r",
-                  # marital status (6 k)
-                  234,
-                  # living with parent
-                  238,
-                  # educational level respondent
-                  "243_ISCED_1",
-                  # Employment
-                  244,
-                  # education level father
-                  "262_ISCED_1",
-                  # educational level mother
-                  "263_ISCED_1",
-                  # Job / profession respondent
-                  "246_egp", # keep
-                  # Income
-                  261,
-                  # When you were 14
-                  264:274,
-                  # Region of interview,
-                  "275b_N1"
-                ))
-)
+                  # (not) mentioned
+                  9:19,
+                  22:26,
+                  40:45,
+                  85:95,
+                  # yes / no
+                  21,
+                  57:61,
+                  112,
+                  227,
+                  259,
+                  260,
+                  230,
+                  232,
+                  # man woman
+                  225,
+                  # trust no trust
+                  31,
+                  # Agree disagree
+                  71
+                )),
+  # Categorical variables
+  cat = c("mode",
+           "country",
+           paste0("v",
+                  c(
+                    # Religious denomination
+                    "52_r",
+                    # Frequency of attendance (7 k)
+                    54, 55,
+                    # Consider yourself (3k)
+                    56,
+                    # statements close to beliefs (4 k)
+                    62,
+                    # how often pray
+                    64,
+                    # agree disagree (4 k)
+                    72:79,
+                    # agree disagree (5 k)
+                    80:84,
+                    # Might have done it (3 k)
+                    98:101,
+                    # Which of these most important (4 k)
+                    108:109,
+                    110:111,
+                    # good, bad, do not mind
+                    113:114,
+                    # Preference among two options (with residual category)
+                    204,
+                    # Country of birth
+                    "228b_r",
+                    "231b_r",
+                    "233b_r",
+                    # marital status (6 k)
+                    234,
+                    # living with parent
+                    238,
+                    # educational level respondent
+                    "243_ISCED_1",
+                    # Employment
+                    244,
+                    # education level father
+                    "262_ISCED_1",
+                    # educational level mother
+                    "263_ISCED_1",
+                    # Job / profession respondent
+                    "246_egp", # keep
+                    # Income
+                    261,
+                    # When you were 14
+                    264:274,
+                    # Region of interview,
+                    "275b_N1"
+                  ))
+  ),
 
-# Ordinal variables
-ord <- c("age",
-         paste0("v", c(
-           # important in life (4 k)
-           1:6,
-           # how happy (4 k)
-           7,
-           # state of health (4 k)
-           8,
-           # Trust level (4 k)
-           32:37,
-           # control over life (10 k)
-           38,
-           # satisfied with life (10 k)
-           39,
-           # agree disagree with statements (5 k)
-           46:50,
-           # importance of god in life (10 k)
-           63,
-           # succesful partnership
-           65:70,
-           # very somewhat (4 k)
-           97,
-           # place your views on this scale (10 k)
-           102:107,
-           # Confidence in (4 k)
-           115:132,
-           # Essential to democracy (10 k)
-           133:144,
-           # very good, fairly good, fairly bad or very bad (10 k)
-           145:148,
-           # justified, never be justified, or something in between (10 k)
-           149:163,
-           # how close you feel to (4 k)
-           164:168,
-           # proud of nationality (4 k)
-           170,
-           # how often (3 k)
-           171:173,
-           # Left/right
-           "174_LR", "175_LR",
-           # how often in country's elections (4 k)
-           176:183,
-           # immigration (5 k)
-           184,
-           # immigration (10 k)
-           185:188,
-           # important (4 k)
-           189:197,
-           # important (10 k)
-           198,
-           # agree or disagree with this statement (5 k)
-           199:203,
-           # government should or should not (4 k)
-           205:207,
-           # how often you follow politics (5 k)
-           208:211,
-           # feel concerned about the living conditions of (5 k)
-           212:220,
-           # What should a society provide?
-           221:224,
-           # Number of children
-           "239a", "239b",
-           # years completed education
-           242,
-           # Duration of interview
-           "279d_r",
-           # Interest in iterview
-           280,
-           # Size of town interview
-           "276_r"
-         )
-         )
-)
+  # Ordinal variables
+  ord = c("age",
+           paste0("v", c(
+             # important in life (4 k)
+             1:6,
+             # how happy (4 k)
+             7,
+             # state of health (4 k)
+             8,
+             # Trust level (4 k)
+             32:37,
+             # control over life (10 k)
+             38,
+             # satisfied with life (10 k)
+             39,
+             # agree disagree with statements (5 k)
+             46:50,
+             # importance of god in life (10 k)
+             63,
+             # succesful partnership
+             65:70,
+             # very somewhat (4 k)
+             97,
+             # place your views on this scale (10 k)
+             102:107,
+             # Confidence in (4 k)
+             115:132,
+             # Essential to democracy (10 k)
+             133:144,
+             # very good, fairly good, fairly bad or very bad (10 k)
+             145:148,
+             # justified, never be justified, or something in between (10 k)
+             149:163,
+             # how close you feel to (4 k)
+             164:168,
+             # proud of nationality (4 k)
+             170,
+             # how often (3 k)
+             171:173,
+             # Left/right
+             "174_LR", "175_LR",
+             # how often in country's elections (4 k)
+             176:183,
+             # immigration (5 k)
+             184,
+             # immigration (10 k)
+             185:188,
+             # important (4 k)
+             189:197,
+             # important (10 k)
+             198,
+             # agree or disagree with this statement (5 k)
+             199:203,
+             # government should or should not (4 k)
+             205:207,
+             # how often you follow politics (5 k)
+             208:211,
+             # feel concerned about the living conditions of (5 k)
+             212:220,
+             # What should a society provide?
+             221:224,
+             # years completed education
+             242,
+             # Duration of interview
+             "279d_r",
+             # Interest in iterview
+             280,
+             # Size of town interview
+             "276_r"
+           )
+           )
+  ),
 
-# count
-cnts <- paste0("v",
-               c(
-                 # Number of children
-                 "239_r",
-                 # People in household
-                 240
-               )
+  # count
+  cnts = paste0("v",
+                 c(
+                   # Number of children
+                   "239_r",
+                   # People in household
+                   240
+                 )
+  )
 )
 
 # Check all variables have measurement level defined
-length(colnames(EVS2017)[!colnames(EVS2017) %in% c(bin, cat, ord, cnts)]) == 0
+length(colnames(EVS2017)[!colnames(EVS2017) %in% unlist(var_types)]) == 0
+
+# Check variables
+unlist(var_types)[!unlist(var_types) %in% colnames(EVS2017)]
+
+# Store variable roles in the input folder
+saveRDS(var_types, "../input/var_types.rds")
 
 # Step 3: Missing cases cases ---------------------------------------------------------
 
@@ -987,7 +1000,11 @@ length(colnames(EVS2017)[!colnames(EVS2017) %in% c(bin, cat, ord, cnts)]) == 0
 
   for (j in 1:ncol(EVS2017)){
     if(is.factor(EVS2017[, j])){
-      EVS2017[, j] <- droplevels(EVS2017[, j], exclude = NA_labels)
+      # Find na labels
+      na_index <- which(EVS2017[, j] %in% NA_labels)
+
+      # Replace with NAs
+      EVS2017[na_index, j] <- NA
     }
   }
 
@@ -995,6 +1012,15 @@ length(colnames(EVS2017)[!colnames(EVS2017) %in% c(bin, cat, ord, cnts)]) == 0
   sum(rowSums(is.na(EVS2017)) == 0)
 
   EVS2017[rowSums(is.na(EVS2017)) == 0, ]
+
+# > Step 6: Final checks on data -----------------------------------------------
+
+  # Drop empty categories
+  for (j in 1:ncol(EVS2017)){
+    if(is.factor(EVS2017[, j])){
+      EVS2017[, j] <- droplevels(EVS2017[, j])
+    }
+  }
 
 # > Step 4: Reduce sample size -------------------------------------------------
 
@@ -1007,16 +1033,25 @@ length(colnames(EVS2017)[!colnames(EVS2017) %in% c(bin, cat, ord, cnts)]) == 0
 
 # > Step 5: Single imputation --------------------------------------------------
 
-# Variables needing imputation
-length(colnames(EVS2017_fc)[colSums(is.na(EVS2017_fc)) != 0])
+  # Which predictors to use
+  qp_mat <- quickpred(EVS2017_fc)
 
-# Which predictors to use
-qp_mat <- quickpred(EVS2017_fc)
+  # Parallel version micemd
+  library(micemd)
 
-# Perform imputation
-imp <- mice(EVS2017_fc,
-            seed = 20220419,
-            method = "pmm",
-            predictorMatrix = qp_mat,
-            m = 5,
-            maxit = 25)
+  imp <- mice.par(don.na = EVS2017_fc,
+                  method = "pmm",
+                  predictorMatrix = qp_mat,
+                  m = 5,
+                  maxit = 25,
+                  nnodes = 5)
+
+# > Step 7: Save new data ------------------------------------------------------
+
+# Temporary Complete case data
+temp <- EVS2017[rowSums(is.na(EVS2017)) == 0, ]
+
+# in the future
+EVS2017_filled <- complete(imp, 1)
+
+saveRDS(temp, "../input/ZA7500_processed.rds")
