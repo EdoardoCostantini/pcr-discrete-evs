@@ -23,6 +23,8 @@ runCell <- function(cond,
   var_types$bin <- var_types$bin[!var_types$bin %in% c("v227", "v230", "v232")]
   index <- which(colnames(EVS2017) %in% c("v227", "v230", "v232")) # in the small toy sample these are constants
 
+  set.seed(1234)
+
   bs_dt <- bootstrapSample(dt = EVS2017[, -index],
                            train_p = .8)
 
