@@ -16,8 +16,8 @@ extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
 
 # Body --------------------------------------------------------------------
   # Define indexing objects for variable types
-  dt_quanti <- dt[, index_cont]
-  dt_quali  <- dt[, index_disc]
+  dt_quanti <- dt[, index_cont, drop = FALSE]
+  dt_quali  <- dt[, index_disc, drop = FALSE]
 
   # Compute the max number of dimensions
   maxdim <- ncol(dt_quanti) + ncol(tab.disjonctif(dt_quali))
