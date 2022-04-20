@@ -14,7 +14,7 @@ runCell <- function(cond,
 # Example Internals -------------------------------------------------------
   
   # set.seed(1234)
-  # cond    = conds[133, ]
+  # cond    = conds[2, ]
   # rp = 1
 
 # Data Generation ---------------------------------------------------------
@@ -28,10 +28,17 @@ runCell <- function(cond,
   bs_dt <- bootstrapSample(dt = EVS2017[, -index],
                            train_p = .8)
 
-  # All variables as categorical
+  # Drop empty factor level (if the bootstrap sample happens to have them)
+  for (j in 1:ncol(bs_dt$dt)){
+    if(is.factor(bs_dt$dt[, j])){
+      bs_dt$dt[, j] <- droplevels(bs_dt$dt[, j])
+    }
+  }
+
+  # All variables as factors -----------------------------------------------
   dt_cat <- bs_dt$dt
 
-  # Oridnal variables as numeric
+  # Oridnal variables as numeric -----------------------------------------------
   dt_mix <- bs_dt$dt
 
   # Transform ordinal variables to numeric (polarity not important in this project)
@@ -56,88 +63,71 @@ runCell <- function(cond,
 # Analysis ----------------------------------------------------------------
 
   # continuous + categorical (PCAmix)
-  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
-                           index_cont = c(var_types$bin,
-                                          var_types$ord,
-                                          var_types$cnts,
-                                          var_types$num),
-                           index_disc = var_types$cat)
+  pcs_mix_pcamix <- extractPCAmix(dt = dt_mix[, -dv_index],
+                                  index_cont = c(var_types$bin,
+                                                 var_types$ord,
+                                                 var_types$cnts,
+                                                 var_types$num),
+                                  index_disc = var_types$cat,
+                                  keep = as.character(cond$npcs))
 
   # continuous + categorical (dummy)
-  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
-                           index_cont = c(var_types$bin,
-                                          var_types$ord,
-                                          var_types$cnts,
-                                          var_types$num),
-                           index_disc = var_types$cat)
+  pcs_mix_dummy <- extractPCs(dt = dt_mix[, -dv_index],
+                              index_cont = c(var_types$num,
+                                             var_types$bin,
+                                             var_types$ord,
+                                             var_types$cnts),
+                              index_disc = var_types$cat,
+                              keep = as.character(cond$npcs),
+                              coding = "dummy")
 
   # continuous + categorical (disjunction)
-  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
-                           index_cont = c(var_types$bin,
-                                          var_types$ord,
-                                          var_types$cnts,
-                                          var_types$num),
-                           index_disc = var_types$cat)
+  pcs_mix_disj <- extractPCs(dt = dt_mix[, -dv_index],
+                              index_cont = c(var_types$num,
+                                             var_types$bin,
+                                             var_types$ord,
+                                             var_types$cnts),
+                              index_disc = var_types$cat,
+                              keep = as.character(cond$npcs),
+                              coding = "disj")
 
   # all categorical (PCAmix)
-  pcs_mca <- extractPCAmix(dt = dt_cat[, -dv_index],
-                           index_cont = var_types$num,
-                           index_disc = c(var_types$bin,
-                                          var_types$ord,
-                                          var_types$cnts,
-                                          var_types$cat))
+  pcs_cat_mca <- extractPCAmix(dt = dt_cat[, -dv_index],
+                               index_cont = var_types$num,
+                               index_disc = c(var_types$bin,
+                                              var_types$ord,
+                                              var_types$cnts,
+                                              var_types$cat),
+                               keep = as.character(cond$npcs))
 
   # all categorical (dummy)
-  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
-                           index_cont = c(var_types$bin,
-                                          var_types$ord,
-                                          var_types$cnts,
-                                          var_types$num),
-                           index_disc = var_types$cat)
+  pcs_cat_dummy <- extractPCs(dt = dt_cat[, -dv_index],
+                              index_cont = var_types$num,
+                              index_disc = c(var_types$cat,
+                                             var_types$bin,
+                                             var_types$ord,
+                                             var_types$cnts),
+                              keep = as.character(cond$npcs),
+                              coding = "dummy")
 
   # all categorical (disjunction)
-  pcs_mix <- extractPCAmix(dt = dt_mix[, -dv_index],
-                           index_cont = c(var_types$bin,
-                                          var_types$ord,
-                                          var_types$cnts,
-                                          var_types$num),
-                           index_disc = var_types$cat)
-
-
-  # PCA Original
-  pcs_orig <- extractPCs(dt = dat_orig,
-                         keep = as.character(cond$npcs))
-
-  # PCA Numerical
-  pcs_nume <- extractPCs(dt = dat_disc,
-                         keep = as.character(cond$npcs))
-
-  # PCA Disjunction table
-  pcs_disj <- extractPCs(dt = dat_disj,
-                         keep = as.character(cond$npcs))
-
-  # PCA Dummy
-  pcs_dumm <- extractPCs(dt = dat_dumm,
-                         keep = as.character(cond$npcs))
-
-  # PCA Polychoric
-  pcs_poly <- extractPCsMixed(dt = dat_disc,
-                              keep = as.character(cond$npcs))
-
-  # PCAmix
-  pcs_PCAmix <- extractPCAmix(dt = dat_disc,
-                              keep = as.character(cond$npcs),
-                              index_cont = index_cont,
-                              index_disc = index_disc)
+  pcs_cat_disj <- extractPCs(dt = dt_cat[, -dv_index],
+                             index_cont = var_types$num,
+                             index_disc = c(var_types$cat,
+                                            var_types$bin,
+                                            var_types$ord,
+                                            var_types$cnts),
+                             keep = as.character(cond$npcs),
+                             coding = "disj")
 
   # Append results
   pcs_list <- list(
-    orig = pcs_orig,
-    nume = pcs_nume,
-    poly = pcs_poly,
-    disj = pcs_disj,
-    dumm = pcs_dumm,
-    PCAmix = pcs_PCAmix
+    mix_pcamix = pcs_mix_pcamix,
+    mix_dummy  = pcs_mix_dummy,
+    mix_disj   = pcs_mix_disj,
+    cat_mca    = pcs_cat_mca,
+    cat_dummy  = pcs_cat_dummy,
+    cat_disj   = pcs_cat_disj
   )
 
   # Extract datasets of PC predictors
@@ -149,13 +139,9 @@ runCell <- function(cond,
   # Extract CPVE by the npcs
   r2 <- lapply(pcs_list, "[[", "r2")
 
-  # Cor with dv
-  cors <- lapply(dts_pcs, function(x){
-    abs(colMeans(cor(x = x, y = y)))
-  })
-
   # PCR MSE
-  mses <- lapply(dts_pcs, extractMSE, y = y, train = train, test = test)
+  mses <- lapply(dts_pcs, extractMSE, y = dt_mix[, dv_index],
+                 train = bs_dt$train, test = bs_dt$test)
 
 # Store Output ------------------------------------------------------------
 

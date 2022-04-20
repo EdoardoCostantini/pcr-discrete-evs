@@ -1,8 +1,8 @@
-# Title:    Defining Fixed Parameters
-# Project:  Ordinality
-# Author:   Edoardo Costantini
-# Created:  2021-06-10
-# Modified: 2022-01-25
+# Project:   pcr_discrete_evs
+# Objective: Defining Fixed Parameters
+# Author:    Edoardo Costantini
+# Created:   2021-06-10
+# Modified:  2022-01-25
 
 # Packages ----------------------------------------------------------------
 
@@ -15,6 +15,7 @@
                  "PCAmixdata",
                  "psych",
                  "stringr",
+                 "nFactors",
                  "dplyr",
                  "testthat",
                  "FactoMineR")
@@ -66,32 +67,18 @@
 
 # Experimental Conditions -------------------------------------------------
 
-  # Number of categories for the discretized variables
-  n_cate <- c(7, 5, 3, 2)
-
-  # Proportion of variables discretized in X
-  p_cate <- c(1/3, 2/3, 1)
-
   # Number of components kept by the PCA extraction
   npcs <- c("naf", "nkaiser",       # non-graphical screeplot solutions
-            parms$XTP_R2,           # (true) CPVE based
             1,                      # most summary
-            length(parms$XTP_VAFr), # (true) number of components
+            seq(0.1, 0.9, .1),      # CPVE based
             parms$P)                # least summary
 
-  # Discretization happens with equal intervals or not
-  interval <- c(TRUE, FALSE)
-
   # Make Conditionsa
-  conds <- expand.grid(K = n_cate, # number of categories
-                       D = p_cate, # ordinality degree
-                       npcs = npcs,
-                       interval = interval,
+  conds <- expand.grid(npcs = npcs,
                        stringsAsFactors = TRUE)
 
   # Append Condition Tag
   conds$tag <- sapply(1:nrow(conds), function(i) {
-    conds$D <- round(conds$D*100,0) # to improve tag name
     paste0(colnames(conds), conds[i, ], collapse = "_")
   }
   )

@@ -1,10 +1,10 @@
-# Project:   pcr_discrete
+# Project:   pcr_discrete_evs
 # Objective: Extract Principal Components with different methods
 # Author:    Edoardo Costantini
 # Created:   2021-10-19
-# Modified:  2022-01-21
+# Modified:  2022-04-20
 
-extractPCs <- function(dt = matrix(), keep = 1L){
+extractPCs <- function(dt = matrix(), keep = 1L, index_cont, index_disc, coding){
 # Description -------------------------------------------------------------
 
   # Given a data set A in matrix for, it extracts the first keep principal
@@ -18,9 +18,29 @@ extractPCs <- function(dt = matrix(), keep = 1L){
 # Internals ---------------------------------------------------------------
 
   # dt = dat_disc # MASS::mvrnorm(1e2, rep(0, 3), diag(3))
-  # keep = c("naf", "nkaiser", ".8", "3")[2] # how should we decide what pcs to keep?
+  # keep = c("naf", "nkaiser", ".8", "3")[1] # how should we decide what pcs to keep?
+  # coding = "dummy"
 
 # Body --------------------------------------------------------------------
+
+  # Codings
+
+  # Define indexing objects for variable types
+  dt_quanti <- dt[, index_cont, drop = FALSE]
+  dt_quali  <- dt[, index_disc, drop = FALSE]
+
+  # dummy
+  if(coding == "dummy"){
+    dt <- cbind(dt_quanti,
+                model.matrix(~ ., dt_quali)[, -1])
+  }
+
+  # disjunction
+  if(coding == "disj"){
+    dt <- cbind(dt_quanti,
+                tab.disjonctif(dt_quali))
+  }
+
   # Make sure data is scaled
   dt <- scale(dt)
 

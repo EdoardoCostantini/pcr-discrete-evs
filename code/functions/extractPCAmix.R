@@ -1,4 +1,4 @@
-# Project:   pcr_discrete
+# Project:   pcr_discrete_evs
 # Objective: extract PCs with the PCAmix method
 # Author:    Edoardo Costantini
 # Created:   2022-01-16
