@@ -16,11 +16,7 @@
                  "psych",
                  "stringr",
                  "dplyr",
-                 "sn",          # for Multivariate Skewed Distribution
-                 "fungible",    # for Multivariate Skewed Distribution
                  "testthat",
-                 "moments",     # for skewness
-                 "nFactors",    # for non-graphical solutions to npcs
                  "FactoMineR")
 
   lapply(pack_list, library, character.only = TRUE, verbose = FALSE)
@@ -41,6 +37,11 @@
   all_help <- paste0("./helper/",
                      list.files("./helper/"))
   lapply(all_help, source)
+
+# Load inputs
+
+  EVS2017   <- readRDS("../input/ZA7500_processed.rds")
+  var_types <- readRDS("../input/var_types.rds")
 
 # Fixed Parameters --------------------------------------------------------
 

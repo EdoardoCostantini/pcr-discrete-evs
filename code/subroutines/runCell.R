@@ -19,19 +19,44 @@ runCell <- function(cond,
 
 # Data Generation ---------------------------------------------------------
 
-  # Get a sample from EVS data
-  XTP <- generateXTP(I = parms$N,
-                     J = parms$P,
-                     VAFr = parms$XTP_VAFr,
-                     VAFsum = parms$XTP_VAFsum,
-                     CPVE = parms$XTP_R2)
+  # TEMP GET RID OF CONSTANTS
+  var_types$bin <- var_types$bin[!var_types$bin %in% c("v227", "v230", "v232")]
+  index <- which(colnames(EVS2017) %in% c("v227", "v230", "v232")) # in the small toy sample these are constants
 
-  # Define Training and Testing data
-  ind   <- sample(1 : nrow(dat_orig))
-  train <- ind[1 : (.8*nrow(dat_orig))]
-  test  <- ind[(.8*nrow(dat_orig)+1) : nrow(dat_orig)]
+  bs_dt <- bootstrapSample(dt = EVS2017[, -index],
+                           train_p = .8)
+
+  # All variables as categorical
+  dt_cat <- bs_dt$dt
+
+  # Oridnal variables as numeric
+  dt_mix <- bs_dt$dt
+
+  # Transform ordinal variables to numeric (polarity not important in this project)
+  for (j in c(var_types$ord, var_types$cnts)){
+    dt_mix[, j] <- as.numeric(dt_mix[, j])
+  }
+
+  # Transform binary variables to numeric 0, 1
+  for (j in var_types$bin){
+    dt_mix[, j] <- as.numeric(dt_mix[, j]) - 1
+  }
+
+  # Define the dependent variable
+  dv_name <- var_types$bin[1]
+
+  # Get rid of it from the vector of variables to avoid confusion down the line
+  var_types$bin <- var_types$bin[-1]
+
+  # Extract the index for this variable in the columns of the dataset
+  dv_index <- which(colnames(bs_dt$dt) %in% dv_name)
 
 # Analysis ----------------------------------------------------------------
+
+  # PCAmix continuous + categorical
+  extractPCAmix(dt = dt_mix[, -dv_index],
+                index_cont = c(var_types$bin, var_types$ord, var_types$cnts),
+                index_disc = var_types$cat)
 
   # PCA Original
   pcs_orig <- extractPCs(dt = dat_orig,
