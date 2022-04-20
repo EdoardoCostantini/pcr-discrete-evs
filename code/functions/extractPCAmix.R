@@ -2,7 +2,7 @@
 # Objective: extract PCs with the PCAmix method
 # Author:    Edoardo Costantini
 # Created:   2022-01-16
-# Modified:  2022-01-21
+# Modified:  2022-04-20
 
 extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
 # Internals ---------------------------------------------------------------
@@ -20,9 +20,7 @@ extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
   dt_quali  <- dt[, index_disc]
 
   # Compute the max number of dimensions
-  nVcat <- ncol(dt_quali)
-  nLvls <- nlevels(dt_quali[, 1])
-  maxdim <- (nLvls - 1) * nVcat + ncol(dt_quanti)
+  maxdim <- ncol(dt_quanti) + ncol(tab.disjonctif(dt_quali))
 
   # Extract components
   if(ncol(dt_quanti) == 0){
