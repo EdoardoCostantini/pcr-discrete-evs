@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-20
+# Modified: 2022-04-21
 
 # Environment ------------------------------------------------------------------
 
@@ -669,23 +669,12 @@
 
 # > age ------------------------------------------------------------------------
 
-  EVS2017 <- EVS2017 %>%
-    mutate(age = replace(x      = age,
-                         list   = age %in% levels(EVS2017$age)[1:8],
-                         values = NA))
+  # Keep age with high number of categories but ordinal
+  apply(EVS2017[, c("v226", "age_r", "age_r2",
+                    "age_r3", "age_r", "age_r3_weight")], 2, table)
 
-
-  # Replace "82 and more" with just "82"
-  EVS2017$age <- recode_factor(EVS2017$age, "82 and older" = "82")
-
-  # Drop empty levels
-  EVS2017$age <- droplevels(EVS2017$age)
-
-  # Transform to numbers
-  EVS2017$age <- as.numeric(as.character(EVS2017$age))
-
-  # Drop other age variables
-  age_drop <- c("v226", "age_r", "age_r2", "age_r3", "age_r", "age_r3_weight")
+  # Keep age_r3, drop other age variables
+  age_drop <- c("v226", "age", "age_r", "age_r2", "age_r3_weight")
   EVS2017 <- dropVars(EVS2017, age_drop)
 
 # > country born in ------------------------------------------------------------
@@ -889,74 +878,76 @@ var_types <- list(
   ),
 
   # Ordinal variables
-  ord = paste0("v", c(
-    # important in life (4 k)
-    1:6,
-    # how happy (4 k)
-    7,
-    # state of health (4 k)
-    8,
-    # Trust level (4 k)
-    32:37,
-    # control over life (10 k)
-    38,
-    # satisfied with life (10 k)
-    39,
-    # agree disagree with statements (5 k)
-    46:50,
-    # importance of god in life (10 k)
-    63,
-    # succesful partnership
-    65:70,
-    # very somewhat (4 k)
-    97,
-    # place your views on this scale (10 k)
-    102:107,
-    # Confidence in (4 k)
-    115:132,
-    # Essential to democracy (10 k)
-    133:144,
-    # very good, fairly good, fairly bad or very bad (10 k)
-    145:148,
-    # justified, never be justified, or something in between (10 k)
-    149:163,
-    # how close you feel to (4 k)
-    164:168,
-    # proud of nationality (4 k)
-    170,
-    # how often (3 k)
-    171:173,
-    # Left/right
-    "174_LR", "175_LR",
-    # how often in country's elections (4 k)
-    176:183,
-    # immigration (5 k)
-    184,
-    # immigration (10 k)
-    185:188,
-    # important (4 k)
-    189:197,
-    # important (10 k)
-    198,
-    # agree or disagree with this statement (5 k)
-    199:203,
-    # government should or should not (4 k)
-    205:207,
-    # how often you follow politics (5 k)
-    208:211,
-    # feel concerned about the living conditions of (5 k)
-    212:220,
-    # What should a society provide?
-    221:224,
-    # years completed education
-    242,
-    # Duration of interview
-    "279d_r",
-    # Interest in iterview
-    280,
-    # Size of town interview
-    "276_r"
-  )
+  ord = c("age_r3",
+          paste0("v", c(
+            # important in life (4 k)
+            1:6,
+            # how happy (4 k)
+            7,
+            # state of health (4 k)
+            8,
+            # Trust level (4 k)
+            32:37,
+            # control over life (10 k)
+            38,
+            # satisfied with life (10 k)
+            39,
+            # agree disagree with statements (5 k)
+            46:50,
+            # importance of god in life (10 k)
+            63,
+            # succesful partnership
+            65:70,
+            # very somewhat (4 k)
+            97,
+            # place your views on this scale (10 k)
+            102:107,
+            # Confidence in (4 k)
+            115:132,
+            # Essential to democracy (10 k)
+            133:144,
+            # very good, fairly good, fairly bad or very bad (10 k)
+            145:148,
+            # justified, never be justified, or something in between (10 k)
+            149:163,
+            # how close you feel to (4 k)
+            164:168,
+            # proud of nationality (4 k)
+            170,
+            # how often (3 k)
+            171:173,
+            # Left/right
+            "174_LR", "175_LR",
+            # how often in country's elections (4 k)
+            176:183,
+            # immigration (5 k)
+            184,
+            # immigration (10 k)
+            185:188,
+            # important (4 k)
+            189:197,
+            # important (10 k)
+            198,
+            # agree or disagree with this statement (5 k)
+            199:203,
+            # government should or should not (4 k)
+            205:207,
+            # how often you follow politics (5 k)
+            208:211,
+            # feel concerned about the living conditions of (5 k)
+            212:220,
+            # What should a society provide?
+            221:224,
+            # years completed education
+            242,
+            # Duration of interview
+            "279d_r",
+            # Interest in iterview
+            280,
+            # Size of town interview
+            "276_r"
+          )
+          )
   ),
 
   # count
@@ -967,8 +958,7 @@ var_types <- list(
                   # People in household
                   240
                 )
-  ),
-  num = "age"
+  )
 )
 
 # Check all variables have measurement level defined
@@ -1068,5 +1058,6 @@ saveRDS(var_types, "../input/var_types.rds")
 
 # Small data for experiments (Complete case data)
 temp <- EVS2017[rowSums(is.na(EVS2017)) == 0, ]
+saveRDS(temp, "../input/ZA7500_processed.rds")
 
 saveRDS(EVS2017_filled, "../input/ZA7500_processed.rds")

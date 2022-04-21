@@ -66,15 +66,13 @@ runCell <- function(cond,
   pcs_mix_pcamix <- extractPCAmix(dt = dt_mix[, -dv_index],
                                   index_cont = c(var_types$bin,
                                                  var_types$ord,
-                                                 var_types$cnts,
-                                                 var_types$num),
+                                                 var_types$cnts),
                                   index_disc = var_types$cat,
                                   keep = as.character(cond$npcs))
 
   # continuous + categorical (dummy)
   pcs_mix_dummy <- extractPCs(dt = dt_mix[, -dv_index],
-                              index_cont = c(var_types$num,
-                                             var_types$bin,
+                              index_cont = c(var_types$bin,
                                              var_types$ord,
                                              var_types$cnts),
                               index_disc = var_types$cat,
@@ -83,8 +81,7 @@ runCell <- function(cond,
 
   # continuous + categorical (disjunction)
   pcs_mix_disj <- extractPCs(dt = dt_mix[, -dv_index],
-                              index_cont = c(var_types$num,
-                                             var_types$bin,
+                              index_cont = c(var_types$bin,
                                              var_types$ord,
                                              var_types$cnts),
                               index_disc = var_types$cat,
@@ -93,7 +90,7 @@ runCell <- function(cond,
 
   # all categorical (PCAmix)
   pcs_cat_mca <- extractPCAmix(dt = dt_cat[, -dv_index],
-                               index_cont = var_types$num,
+                               index_cont = NULL,
                                index_disc = c(var_types$bin,
                                               var_types$ord,
                                               var_types$cnts,
@@ -102,7 +99,7 @@ runCell <- function(cond,
 
   # all categorical (dummy)
   pcs_cat_dummy <- extractPCs(dt = dt_cat[, -dv_index],
-                              index_cont = var_types$num,
+                              index_cont = NULL,
                               index_disc = c(var_types$cat,
                                              var_types$bin,
                                              var_types$ord,
@@ -112,7 +109,7 @@ runCell <- function(cond,
 
   # all categorical (disjunction)
   pcs_cat_disj <- extractPCs(dt = dt_cat[, -dv_index],
-                             index_cont = var_types$num,
+                             index_cont = NULL,
                              index_disc = c(var_types$cat,
                                             var_types$bin,
                                             var_types$ord,
