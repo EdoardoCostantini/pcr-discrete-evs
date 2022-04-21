@@ -612,7 +612,7 @@
     mutate(v110 = replace(x      = v110,
                           list   = f110 == "inconsistent",
                           values = NA),
-           v109 = replace(x      = v111,
+           v111 = replace(x      = v111,
                           list   = f110 == "inconsistent",
                           values = NA))
 
@@ -1038,19 +1038,35 @@ saveRDS(var_types, "../input/var_types.rds")
   # Parallel version micemd
   library(micemd)
 
+  # Multiple imputation with pmm of the data
   imp <- mice.par(don.na = EVS2017_fc,
                   method = "pmm",
                   predictorMatrix = qp_mat,
                   m = 5,
                   maxit = 25,
+                  seed = 20220421,
                   nnodes = 5)
+
+  # Save the results in output
+  saveRDS(imp, "../output/ZA7500_mi.rds")
+
+  # Read if you had saved it already
+  imp <- readRDS("../output/ZA7500_mi.rds")
+
+  # Convergence checks
+  plot.mids_formula <- as.formula(paste0(
+    paste0(colnames(EVS2017_filled)[-c(1:2)][50:60],
+           collapse = " + "),
+    " ~ .it | .ms"
+  ))
+  plot(imp, plot.mids_formula, layout = c(2, 5))
+
+  # Extract the first data to use it
+  EVS2017_filled <- complete(imp, 1)
 
 # > Step 7: Save new data ------------------------------------------------------
 
-# Temporary Complete case data
+# Small data for experiments (Complete case data)
 temp <- EVS2017[rowSums(is.na(EVS2017)) == 0, ]
 
-# in the future
-EVS2017_filled <- complete(imp, 1)
-
-saveRDS(temp, "../input/ZA7500_processed.rds")
+saveRDS(EVS2017_filled, "../input/ZA7500_processed.rds")
