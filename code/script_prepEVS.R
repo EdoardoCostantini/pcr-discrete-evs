@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-21
+# Modified: 2022-04-22
 
 # Environment ------------------------------------------------------------------
 
@@ -16,7 +16,7 @@
   library(forcats) # for fct_collapse() function to recode factors
 
   # Source
-  source("./helper/dropVars.R")
+  source("./functions/dropVars.R")
 
 # Read Data --------------------------------------------------------------------
 
@@ -1045,7 +1045,7 @@ saveRDS(var_types, "../input/var_types.rds")
 
   # Convergence checks
   plot.mids_formula <- as.formula(paste0(
-    paste0(colnames(EVS2017_filled)[-c(1:2)][50:60],
+    paste0(colnames(imp$data)[-c(1:2)][1:10],
            collapse = " + "),
     " ~ .it | .ms"
   ))
