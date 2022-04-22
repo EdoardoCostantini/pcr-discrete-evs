@@ -25,6 +25,7 @@ Here is the project structure:
 pcr_discrete_evs
 ├── code
 │ ├── functions
+│ │ ├── dropVars.R
 │ │ ├── extractMSE.R
 │ │ ├── extractPCAmix.R
 │ │ ├── extractPCs.R
@@ -32,7 +33,6 @@ pcr_discrete_evs
 │ │ ├── generateDV.R
 │ │ └── orthmat.R
 │ ├── helper
-│ │ ├── dropVars.R
 │ │ ├── readTarGz.R
 │ │ └── writeTarGz.R
 │ ├── scratch
