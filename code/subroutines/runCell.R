@@ -79,7 +79,7 @@ runCell <- function(cond,
                               keep = as.character(cond$npcs),
                               coding = "dummy")
 
-  # continuous + categorical (disjunction)
+  # continuous + categorical (disjunctive)
   pcs_mix_disj <- extractPCs(dt = dt_mix[, -dv_index],
                               index_cont = c(var_types$bin,
                                              var_types$ord,
@@ -107,7 +107,7 @@ runCell <- function(cond,
                               keep = as.character(cond$npcs),
                               coding = "dummy")
 
-  # all categorical (disjunction)
+  # all categorical (disjunctive)
   pcs_cat_disj <- extractPCs(dt = dt_cat[, -dv_index],
                              index_cont = NULL,
                              index_disc = c(var_types$cat,

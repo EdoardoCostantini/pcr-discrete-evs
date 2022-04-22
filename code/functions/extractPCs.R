@@ -35,7 +35,7 @@ extractPCs <- function(dt = matrix(), keep = 1L, index_cont, index_disc, coding)
                 model.matrix(~ ., dt_quali)[, -1])
   }
 
-  # disjunction
+  # disjunctive
   if(coding == "disj"){
     dt <- cbind(dt_quanti,
                 tab.disjonctif(dt_quali))
