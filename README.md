@@ -19,6 +19,14 @@ I compared the following coding schemes:
   - **Disjunctive table**: the PCs are extracted from a design matrix combining the data treated as continuous with the complete disjunctive table of the discrete variables.
   - **PCAmix**: the PCs are extracted from a design matrix combining the data treated as continuous with the disjunctive table of the categorical data, but scaling is performed as described by [Chavent et. al. (2017)](https://arxiv.org/abs/1411.4911).
   
+## Outcome measures
+
+I compared the prediction error obtained by using the differently extracted PCs based on:
+
+- **means squared error** (MSE):  
+- **[cross-entropy](https://rpubs.com/juanhklopper/cross_entropy)** (centropy)  
+
+
 # Repository structure
 Here is the project structure:
 ```
