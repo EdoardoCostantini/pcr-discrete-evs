@@ -2,7 +2,7 @@
 # Objective: Defining Fixed Parameters
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-01-25
+# Modified:  2022-04-22
 
 # Packages ----------------------------------------------------------------
 
@@ -20,6 +20,7 @@
                  "testthat",
                  "FactoMineR")
 
+  # lapply(pack_list, install.packages)
   lapply(pack_list, library, character.only = TRUE, verbose = FALSE)
 
 # Load Functions ----------------------------------------------------------
