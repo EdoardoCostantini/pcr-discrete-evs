@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-06
+# Modified: 2022-04-28
 # Note:     A "cell" is a cycle through the set of conditions.
 #           The function in this script generates 1 data set, performs
 #           imputations for every condition in the set.
@@ -11,13 +11,13 @@ runCell <- function(cond,
                     fs,
                     rp) {
 
-# Example Internals -------------------------------------------------------
-  
+  # Example Internals -------------------------------------------------------
+
   # set.seed(1234)
-  # cond    = conds[2, ]
+  # cond    = conds[1, ]
   # rp = 1
 
-# Data Generation ---------------------------------------------------------
+  # Data Generation ---------------------------------------------------------
 
   # TEMP GET RID OF CONSTANTS
   var_types$bin <- var_types$bin[!var_types$bin %in% c("v227", "v230", "v232")]
@@ -25,29 +25,31 @@ runCell <- function(cond,
 
   set.seed(1234)
 
-  bs_dt <- bootstrapSample(dt = EVS2017[, -index],
-                           train_p = .8)
+  bs_dt <- bootstrapSample(
+    dt = EVS2017,
+    train_p = .8
+  )
 
   # Drop empty factor level (if the bootstrap sample happens to have them)
-  for (j in 1:ncol(bs_dt$dt)){
-    if(is.factor(bs_dt$dt[, j])){
+  for (j in 1:ncol(bs_dt$dt)) {
+    if (is.factor(bs_dt$dt[, j])) {
       bs_dt$dt[, j] <- droplevels(bs_dt$dt[, j])
     }
   }
 
-  # All variables as factors -----------------------------------------------
+  # All variables as factors ---------------------------------------------------
   dt_cat <- bs_dt$dt
 
   # Oridnal variables as numeric -----------------------------------------------
   dt_mix <- bs_dt$dt
 
   # Transform ordinal variables to numeric (polarity not important in this project)
-  for (j in c(var_types$ord, var_types$cnts)){
+  for (j in c(var_types$ord, var_types$cnts)) {
     dt_mix[, j] <- as.numeric(dt_mix[, j])
   }
 
   # Transform binary variables to numeric 0, 1
-  for (j in var_types$bin){
+  for (j in var_types$bin) {
     dt_mix[, j] <- as.numeric(dt_mix[, j]) - 1
   }
 
@@ -60,62 +62,88 @@ runCell <- function(cond,
   # Extract the index for this variable in the columns of the dataset
   dv_index <- which(colnames(bs_dt$dt) %in% dv_name)
 
-# Analysis ----------------------------------------------------------------
+  # Analysis ----------------------------------------------------------------
 
   # continuous + categorical (PCAmix)
-  pcs_mix_pcamix <- extractPCAmix(dt = dt_mix[, -dv_index],
-                                  index_cont = c(var_types$bin,
-                                                 var_types$ord,
-                                                 var_types$cnts),
-                                  index_disc = var_types$cat,
-                                  keep = as.character(cond$npcs))
+  pcs_mix_pcamix <- extractPCAmix(
+    dt = dt_mix[, -dv_index],
+    index_cont = c(
+      var_types$ord,
+      var_types$cnts
+    ),
+    index_disc = c(
+      var_types$bin,
+      var_types$cat
+    ),
+    keep = as.character(cond$npcs)
+  )
 
   # continuous + categorical (dummy)
-  pcs_mix_dummy <- extractPCs(dt = dt_mix[, -dv_index],
-                              index_cont = c(var_types$bin,
-                                             var_types$ord,
-                                             var_types$cnts),
-                              index_disc = var_types$cat,
-                              keep = as.character(cond$npcs),
-                              coding = "dummy")
+  pcs_mix_dummy <- extractPCs(
+    dt = dt_mix[, -dv_index],
+    index_cont = c(
+      var_types$bin,
+      var_types$ord,
+      var_types$cnts
+    ),
+    index_disc = var_types$cat,
+    keep = as.character(cond$npcs),
+    coding = "dummy"
+  )
 
   # continuous + categorical (disjunctive)
-  pcs_mix_disj <- extractPCs(dt = dt_mix[, -dv_index],
-                              index_cont = c(var_types$bin,
-                                             var_types$ord,
-                                             var_types$cnts),
-                              index_disc = var_types$cat,
-                              keep = as.character(cond$npcs),
-                              coding = "disj")
+  pcs_mix_disj <- extractPCs(
+    dt = dt_mix[, -dv_index],
+    index_cont = c(
+      var_types$bin,
+      var_types$ord,
+      var_types$cnts
+    ),
+    index_disc = var_types$cat,
+    keep = as.character(cond$npcs),
+    coding = "disj"
+  )
 
   # all categorical (PCAmix)
-  pcs_cat_mca <- extractPCAmix(dt = dt_cat[, -dv_index],
-                               index_cont = NULL,
-                               index_disc = c(var_types$bin,
-                                              var_types$ord,
-                                              var_types$cnts,
-                                              var_types$cat),
-                               keep = as.character(cond$npcs))
+  pcs_cat_mca <- extractPCAmix(
+    dt = dt_cat[, -dv_index],
+    index_cont = NULL,
+    index_disc = c(
+      var_types$bin,
+      var_types$ord,
+      var_types$cnts,
+      var_types$cat
+    ),
+    keep = as.character(cond$npcs)
+  )
 
   # all categorical (dummy)
-  pcs_cat_dummy <- extractPCs(dt = dt_cat[, -dv_index],
-                              index_cont = NULL,
-                              index_disc = c(var_types$cat,
-                                             var_types$bin,
-                                             var_types$ord,
-                                             var_types$cnts),
-                              keep = as.character(cond$npcs),
-                              coding = "dummy")
+  pcs_cat_dummy <- extractPCs(
+    dt = dt_cat[, -dv_index],
+    index_cont = NULL,
+    index_disc = c(
+      var_types$cat,
+      var_types$bin,
+      var_types$ord,
+      var_types$cnts
+    ),
+    keep = as.character(cond$npcs),
+    coding = "dummy"
+  )
 
   # all categorical (disjunctive)
-  pcs_cat_disj <- extractPCs(dt = dt_cat[, -dv_index],
-                             index_cont = NULL,
-                             index_disc = c(var_types$cat,
-                                            var_types$bin,
-                                            var_types$ord,
-                                            var_types$cnts),
-                             keep = as.character(cond$npcs),
-                             coding = "disj")
+  pcs_cat_disj <- extractPCs(
+    dt = dt_cat[, -dv_index],
+    index_cont = NULL,
+    index_disc = c(
+      var_types$cat,
+      var_types$bin,
+      var_types$ord,
+      var_types$cnts
+    ),
+    keep = as.character(cond$npcs),
+    coding = "disj"
+  )
 
   # Append results
   pcs_list <- list(
@@ -138,30 +166,35 @@ runCell <- function(cond,
 
   # PCR MSE
   mses <- lapply(dts_pcs, extractMSE,
-                 y = as.numeric(bs_dt$dt[, parms$DVs$num]),
-                 train = bs_dt$train, test = bs_dt$test)
+    y = as.numeric(bs_dt$dt[, parms$DVs$num]),
+    train = bs_dt$train, test = bs_dt$test
+  )
 
   # PCR binary centropy
   centropy_bin <- lapply(dts_pcs, extractCentropy,
-                         y = bs_dt$dt[, parms$DVs$bin],
-                         train = bs_dt$train, test = bs_dt$test)
+    y = bs_dt$dt[, parms$DVs$bin],
+    train = bs_dt$train, test = bs_dt$test
+  )
 
   # PCR categorical centropy
   centropy_cat <- lapply(dts_pcs, extractCentropy,
-                         y = bs_dt$dt[, parms$DVs$cat],
-                         train = bs_dt$train, test = bs_dt$test)
+    y = bs_dt$dt[, parms$DVs$cat],
+    train = bs_dt$train, test = bs_dt$test
+  )
 
 
-# Store Output ------------------------------------------------------------
+  # Store Output ------------------------------------------------------------
 
   ## Define storing object
   output <- cbind(cond, npcs = npcs, r2 = r2, cors = cors, mses = mses)
 
   ## Return it
   saveRDS(output,
-          file = paste0(fs$outDir,
-                        "rep", rp,
-                        "_cond", cond$tag,
-                        ".rds")
+    file = paste0(
+      fs$outDir,
+      "rep", rp,
+      "_cond", cond$tag,
+      ".rds"
+    )
   )
 }
