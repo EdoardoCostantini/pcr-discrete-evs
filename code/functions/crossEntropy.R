@@ -4,26 +4,16 @@
 # Created:   2022-04-22
 # Modified:  2022-04-22
 
-crossEntropy <- function(p, p_hat) {
+crossEntropy <- function(p = matrix(), p_hat = matrix()) {
   # Internals -------------------------------------------------------------
 
-  # p = c(1, 0, 1, 1, 1, 0, 1) # observed label (true probability)
-  # p_hat = c(.9, .1, .8, .2, .8, .24, .12) # predicted probability value
+  # p = matrix(c(1, 0, 1, 1, 1, 0, 1)) # observed label (true probability)
+  # p_hat = matrix(c(.9, .1, .8, .2, .8, .24, .12)) # predicted probability value
 
   # Body ------------------------------------------------------------------
+  ce <- -sum(diag(p %*% t(log(p_hat))))
 
-  # Output size
-  os <- length(unique(y))
-
-  # Starting centropy value
-  x <- 0
-
-  # For every observation, compute
-  for (i in 1:length(p)){
-    # Sum the
-    x <- x + (p[i] * log(p_hat[i]))
-  }
-
-  return(-x)
+  # Return
+  return(ce)
 
 }
