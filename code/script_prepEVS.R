@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-22
+# Modified: 2022-04-28
 
 # Environment ------------------------------------------------------------------
 
@@ -204,7 +204,7 @@
   # Drop all v_codes
   EVS2017 <- dropVars(EVS2017, v_codes)
 
-# > Weights --------------------------------------------------------------------
+  # > Weights ------------------------------------------------------------------
 
   v_weights <- c(
     "gweight",
@@ -219,7 +219,7 @@
   # Drop
   EVS2017 <- dropVars(EVS2017, v_weights)
 
-# > Country specific variables: Germany ----------------------------------------
+  # > Country specific variables: Germany --------------------------------------
 
   # CAWI and Mail matrix-design survey the genuine scale was falsely changed to include
   # an additional middle-category
@@ -237,7 +237,7 @@
   # Drop
   EVS2017 <- dropVars(EVS2017, v_cs_DE) # Drop
 
-# > Country specific variables: Sweden -----------------------------------------
+  # > Country specific variables: Sweden ---------------------------------------
 
   # Different question wording (can drop)
   v_cs_SE <- c(
@@ -247,7 +247,7 @@
   # Drop
   EVS2017 <- dropVars(EVS2017, v_cs_SE) # Drop
 
-# > Country specific variables: Denmark, Finland, Netherlands, Iceland ---------
+  # > Country specific variables: Denmark, Finland, Netherlands, Iceland -------
 
   # Answer category “0 It is against democracy” not in CAPI is in CAWI
   v_cs_dfni <- c(
@@ -277,7 +277,7 @@
     EVS2017[, baseVar][index] <- EVS2017[, v][index]
   }
 
-# > Country specific variables: Denmark ----------------------------------------
+  # > Country specific variables: Denmark --------------------------------------
 
   v_cs_DK <- c(
     # Answer category 4 "Not at all often" is missing in field questionnaire
@@ -312,7 +312,7 @@
   # Drop
   EVS2017 <- dropVars(EVS2017, c(v_cs_DK))
 
-# > Country specific variables: Switzerland ------------------------------------
+  # > Country specific variables: Switzerland ----------------------------------
 
   # Non-standard question wording
   v_cs_CH <- "f252_edulvlb_CH"
@@ -320,8 +320,8 @@
   # Drop
   EVS2017 <- dropVars(EVS2017, v_cs_CH)
 
-# > Country specific variables: Italy ------------------------------------------
-# Survey Experiment: EVS 2017 Italy
+  # > Country specific variables: Italy ----------------------------------------
+  # Survey Experiment: EVS 2017 Italy
 
   # Variation of wording flag
   v_cs_IT <- c(
@@ -350,7 +350,7 @@
 
 # Step 3: Question by question scan --------------------------------------------
 
-# > Q4: mind having any of these as neighbours ---------------------------------
+  # > Q4: mind having any of these as neighbours -------------------------------
 
 # v20
   # Check that even if v20a == mentioned, answers to 9 to 19 are don't know
@@ -403,7 +403,7 @@
   # I will drop v20b because information is already recorded in v9 to v19
   EVS2017 <- dropVars(EVS2017, "v20b")
 
-# > Q6: mind having any of these as neighbours ---------------------------------
+  # > Q6: mind having any of these as neighbours -------------------------------
 
 # v27 to v30
   # These are optional questions that craete a "item not included" type of
@@ -469,7 +469,7 @@
   # I will drop v30c because information is already recorded in v22 to v26
   EVS2017 <- dropVars(EVS2017, "v30c")
 
-# > Q13: religious belief ------------------------------------------------------
+  # > Q13: religious belief ----------------------------------------------------
 
   # First there is gated question
   table(EVS2017$v51)
@@ -500,7 +500,7 @@
   # v53 is not a variable we want to keep in
   EVS2017 <- dropVars(EVS2017, "v53")
 
-# > Q28: qualities children encouraged -----------------------------------------
+  # > Q28: qualities children encouraged ---------------------------------------
 
 # f85
   # Check frequencies
@@ -567,7 +567,7 @@
   # I will drop v96b because information is already recorded in v85 to v95
   EVS2017 <- dropVars(EVS2017, "v96b")
 
-# > Q33: aims of this country --------------------------------------------------
+  # > Q33: aims of this country ------------------------------------------------
 
 # v108 and v109
   # Possible inconsistency
@@ -593,7 +593,7 @@
   # Get rid of inconsistency flag
   EVS2017 <- dropVars(EVS2017, "f108")
 
-# > Q34-35: which of these most important --------------------------------------
+  # > Q34-35: which of these most important ------------------------------------
 
 # v110 and v111
   # Possible inconsistency
@@ -622,7 +622,7 @@
   # Drop post materialist index
   EVS2017 <- dropVars(EVS2017, "v111_4")
 
-# > Q39: Democracy variables ---------------------------------------------------
+  # > Q39: Democracy variables -------------------------------------------------
 
   # Variants are tagged by _11c
   table(og = EVS2017$v133,
@@ -640,7 +640,7 @@
   # Just get rid of variant (info already in main variable)
   EVS2017 <- dropVars(EVS2017, paste0("v", 133:141, "_11c"))
 
-# > Q45: aspects of a job ------------------------------------------------------
+  # > Q45: aspects of a job ----------------------------------------------------
 
   # Trust the answers on v40 to v45, get rid of rest
   drop_q45 <- c("f45a", "v45a", "v45b", "v45c")
@@ -648,7 +648,7 @@
   # Drop f20 and v20 as all the info is in the other variables already
   EVS2017 <- dropVars(EVS2017, drop_q45)
 
-# > Q46 Q47 Nationality --------------------------------------------------------
+  # > Q46 Q47 Nationality ------------------------------------------------------
 
   # Cross-table
   table(nationa = EVS2017$v169,
@@ -662,12 +662,12 @@
   # and get rid of v169 which becames a constant
   EVS2017 <- dropVars(EVS2017, "v169")
 
-# > Q49: Political party -------------------------------------------------------
+  # > Q49: Political party -----------------------------------------------------
 
   # Drop country based variables (and keep standardized)
   EVS2017 <- dropVars(EVS2017, c("v174_cs", "v175_cs"))
 
-# > age ------------------------------------------------------------------------
+  # > age ----------------------------------------------------------------------
 
   # Keep age with high number of categories but ordinal
   apply(EVS2017[, c("v226", "age_r", "age_r2",
@@ -677,7 +677,7 @@
   age_drop <- c("v226", "age", "age_r", "age_r2", "age_r3_weight")
   EVS2017 <- dropVars(EVS2017, age_drop)
 
-# > country born in ------------------------------------------------------------
+  # > country born in ----------------------------------------------------------
 
   # Drop base v228b
   EVS2017 <- dropVars(EVS2017, "v228b")
@@ -685,7 +685,7 @@
   # Drop year moved in country as very few cases applicable
   EVS2017 <- dropVars(EVS2017, "v229")
 
-# > marital status ------------------------------------------------------------
+  # > marital status -----------------------------------------------------------
 
   # Drop gated questions
   # - 235: living together before marriage
@@ -694,7 +694,7 @@
   # - 250: Was your partner/spouse born in
   EVS2017 <- dropVars(EVS2017, c("v235", "v236", "v237", "v250", "v251b_r"))
 
-# > number of children ---------------------------------------------------------
+  # > number of children -------------------------------------------------------
 
   # Drop base variables
   EVS2017 <- dropVars(EVS2017, c("v239a", "v239b"))
@@ -703,7 +703,7 @@
   EVS2017$v239_r <- recode_factor(EVS2017$v239_r, "5 and more" = "5")
   EVS2017$v239_r <- recode_factor(EVS2017$v239_r, "no children" = "0")
 
-# > leaving in household
+  # > leaving in household -----------------------------------------------------
 
   # Recode live alone to 1
   EVS2017$v240 <- recode_factor(EVS2017$v240, "I live alone" = "1")
@@ -715,7 +715,7 @@
   # Drop gated questions
   EVS2017 <- dropVars(EVS2017, "v241")
 
-# > completed education --------------------------------------------------------
+  # > completed education ------------------------------------------------------
 
   # Recode # and younger / older
   EVS2017$v242 <- recode_factor(EVS2017$v242, "7 and younger" = "7")
@@ -739,7 +739,7 @@
   )
   EVS2017 <- dropVars(EVS2017, cs_edu)
 
-# > employment -----------------------------------------------------------------
+  # > employment ---------------------------------------------------------------
 
   # Drop too gated questions
   EVS2017 <- dropVars(EVS2017,
@@ -756,7 +756,7 @@
                       paste0("v", c(249, 253:254, 256:258, "255_egp"))
   )
 
-# > date of interview ---------------------------------------------------------------------
+  # > date of interview --------------------------------------------------------
 
   # Keep length of interview in minutes drop everything else
   EVS2017 <- dropVars(EVS2017,
@@ -778,7 +778,7 @@
                              list   = v279d_r == "item not included",
                              values = NA))
 
-# > interest in interview ------------------------------------------------------
+  # > interest in interview ----------------------------------------------------
 
   # Recode not included to missing value
   EVS2017 <- EVS2017 %>%
@@ -787,7 +787,7 @@
                           values = NA))
   # EVS2017$v280 <- recode_factor(EVS2017$v280, "item not included" = "NA")
 
-# > language of interview ------------------------------------------------------
+  # > language of interview ----------------------------------------------------
 
   # Check overlap between country of interview and language of inteview
   table(lan = EVS2017$v281a, EVS2017$v275b_N1)
@@ -837,10 +837,6 @@ var_types <- list(
                    62,
                    # how often pray
                    64,
-                   # agree disagree (4 k)
-                   72:79,
-                   # agree disagree (5 k)
-                   80:84,
                    # Might have done it (3 k)
                    98:101,
                    # Which of these most important (4 k)
@@ -898,6 +894,10 @@ var_types <- list(
             63,
             # succesful partnership
             65:70,
+            # agree disagree (4 k)
+            72:79,
+            # agree disagree (5 k)
+            80:84,
             # very somewhat (4 k)
             97,
             # place your views on this scale (10 k)
@@ -970,7 +970,7 @@ unlist(var_types)[!unlist(var_types) %in% colnames(EVS2017)]
 # Store variable roles in the input folder
 saveRDS(var_types, "../input/var_types.rds")
 
-# Step 3: Missing cases cases ---------------------------------------------------------
+# Step 5: Missing cases cases --------------------------------------------------
 
   NA_labels <- c("multiple answers Mail",
                  "no follow-up",
@@ -1002,7 +1002,7 @@ saveRDS(var_types, "../input/var_types.rds")
 
   EVS2017[rowSums(is.na(EVS2017)) == 0, ]
 
-# > Step 6: Final checks on data -----------------------------------------------
+# Step 6: Final checks on data -------------------------------------------------
 
   # Drop empty categories
   for (j in 1:ncol(EVS2017)){
@@ -1011,7 +1011,7 @@ saveRDS(var_types, "../input/var_types.rds")
     }
   }
 
-# > Step 4: Reduce sample size -------------------------------------------------
+# Step 7: Reduce sample size ---------------------------------------------------
 
   # Select only obs from founding countries
   EVS2017_fc <- EVS2017 %>%
@@ -1020,7 +1020,7 @@ saveRDS(var_types, "../input/var_types.rds")
   # Drop levels of country not used
   EVS2017_fc$country <- droplevels(EVS2017_fc$country)
 
-# > Step 5: Single imputation --------------------------------------------------
+# Step 8: Single imputation ----------------------------------------------------
 
   # Which predictors to use
   qp_mat <- quickpred(EVS2017_fc)
@@ -1054,7 +1054,7 @@ saveRDS(var_types, "../input/var_types.rds")
   # Extract the first data to use it
   EVS2017_filled <- complete(imp, 1)
 
-# > Step 7: Save new data ------------------------------------------------------
+# Step 9: Save new data --------------------------------------------------------
 
 # Small data for experiments (Complete case data)
 temp <- EVS2017[rowSums(is.na(EVS2017)) == 0, ]
