@@ -18,7 +18,9 @@
                  "nFactors",
                  "dplyr",
                  "testthat",
-                 "FactoMineR")
+                 "FactoMineR",
+                 "nnet" # for multinomial regression
+  )
 
   # lapply(pack_list, install.packages)
   lapply(pack_list, library, character.only = TRUE, verbose = FALSE)
