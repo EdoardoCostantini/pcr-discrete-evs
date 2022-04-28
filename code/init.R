@@ -42,11 +42,6 @@
                      list.files("./helper/"))
   lapply(all_help, source)
 
-# Load inputs
-
-  EVS2017   <- readRDS("../input/ZA7500_processed.rds")
-  var_types <- readRDS("../input/var_types.rds")
-
 # Fixed Parameters --------------------------------------------------------
 
   # Empty List
@@ -58,21 +53,29 @@
   parms$nStreams <- 1000
 
   # Data generation
-  parms$N          <- 1e3 # sample size
-  parms$P          <- 12  # number of variables
-  parms$XTP_VAFr   <- c(.5, .3, .2) # relative variance of each component
-  parms$XTP_VAFsum <- 100 # total variance of the components
-  parms$XTP_R2     <- 0.8
-  parms$yT_R2      <- 0.8
-  parms$yT_beta    <- 1
-  parms$min_bin    <- 0.05 # target minimum proportion of cases in every
-                           # category of discretized variables
+  parms$DVs <- list(num = "v102",
+                    bin = "v10",
+                    cat = "v244")
+
+# Load and prepare inputs
+
+  # Load pre-processed EVS data
+  EVS2017   <- readRDS("../input/ZA7500_processed.rds")
+
+  # Load variables type description
+  var_types <- readRDS("../input/var_types.rds")
+
+  # Get rid of DVs from the variable type object
+  var_types <- lapply(var_types, function (x){
+    x[!x %in% unlist(parms$DVs)]
+  })
 
 # Experimental Conditions -------------------------------------------------
 
   # Number of components kept by the PCA extraction
   npcs <- c("naf", "nkaiser",       # non-graphical screeplot solutions
             1,                      # most summary
+            10,
             seq(0.1, 0.9, .1),      # CPVE based
             parms$P)                # least summary
 
