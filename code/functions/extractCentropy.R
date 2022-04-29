@@ -66,9 +66,13 @@ extractCentropy <- function(y = vector(),
   }
 
   # Compute test-set cross-entropy:
-  centropy <- crossEntropy(p = p, p_hat = preds)
+  centropy <- crossEntropy(p = p, p_hat = preds_probs)
 
-  ## Return
-  return(centropy)
+  # Compute test-set accuracy:
+  accuracy <- correctClass(y_true = y[test], preds = preds_class)
+
+  # Return
+  return(c(centropy = centropy,
+           accuracy = accuracy))
 
 }
