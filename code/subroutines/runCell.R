@@ -164,13 +164,13 @@ runCell <- function(cond,
   )
 
   # PCR binary centropy
-  centropy_bin <- sapply(dts_pcs, extractCentropy,
+  om_binary <- sapply(dts_pcs, extractCatOm,
     y = bs_dt$dt[, parms$DVs$bin],
     train = bs_dt$train, test = bs_dt$test
   )
 
   # PCR categorical centropy
-  centropy_cat <- sapply(dts_pcs, extractCentropy,
+  om_categos <- sapply(dts_pcs, extractCatOm,
     y = bs_dt$dt[, parms$DVs$cat],
     train = bs_dt$train, test = bs_dt$test
   )

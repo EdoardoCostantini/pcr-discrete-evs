@@ -4,10 +4,10 @@
 # Created:   2022-04-22
 # Modified:  2022-04-29
 
-extractCentropy <- function(y = vector(),
-                            x = matrix(),
-                            train = vector("integer"),
-                            test = vector("integer")) {
+extractCatOm <- function(y = vector(),
+                         x = matrix(),
+                         train = vector("integer"),
+                         test = vector("integer")) {
   # Internals -------------------------------------------------------------
 
   ## Example with binary data
