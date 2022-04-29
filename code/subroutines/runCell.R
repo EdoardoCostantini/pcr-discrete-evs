@@ -71,11 +71,13 @@ runCell <- function(cond,
   pcs_mix_dummy <- extractPCs(
     in_dt = dt_mix[, -dv_index],
     index_cont = c(
-      var_types$bin,
       var_types$ord,
       var_types$cnts
     ),
-    index_disc = var_types$cat,
+    index_disc = c(
+      var_types$bin,
+      var_types$cat
+    ),
     keep = as.character(cond$npcs),
     coding = "dummy"
   )
@@ -84,11 +86,13 @@ runCell <- function(cond,
   pcs_mix_disj <- extractPCs(
     in_dt = dt_mix[, -dv_index],
     index_cont = c(
-      var_types$bin,
       var_types$ord,
       var_types$cnts
     ),
-    index_disc = var_types$cat,
+    index_disc = c(
+      var_types$bin,
+      var_types$cat
+    ),
     keep = as.character(cond$npcs),
     coding = "disj"
   )
