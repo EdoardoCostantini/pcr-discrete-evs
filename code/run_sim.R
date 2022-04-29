@@ -1,8 +1,8 @@
-### Title:    Subroutine doRep (windows parallelization framework)
-### Project:  Ordinality
-### Author:   Edoardo Costantini
-### Created:  2021-06-10
-### Modified: 2022-01-25
+# Project:   pcr_discrete_evs
+# Objective: Subroutine doRep (windows parallelization framework)
+# Author:    Edoardo Costantini
+# Created:   2021-06-10
+# Modified:  2022-01-25
 
 ## Make sure we have a clean environment:
 rm(list = ls())

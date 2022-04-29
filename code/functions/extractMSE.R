@@ -1,4 +1,4 @@
-# Project:   ordinality
+# Project:   pcr_discrete_evs
 # Objective: Extract MSE from a single dataset
 # Author:    Edoardo Costantini
 # Created:   2021-10-19
