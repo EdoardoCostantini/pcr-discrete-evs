@@ -34,44 +34,35 @@ extractCentropy <- function(y = vector(),
   # Estimate model
   vars <- colnames(dt_df)
 
-  ## Logitic
+  # Fit model (if binary dv it does logit)
+  glm_out <- multinom(paste0(vars[1],
+                             " ~ ",
+                             paste0(vars[-1], collapse = " + ")),
+                      data = dt_df[train, ]) # saturated model
+
+  # Generate test-set probs predictions (i.e., y-hats):
+  preds_probs <- predict(glm_out,
+                         newdata = dt_df[test, , drop = FALSE],
+                         type = "probs")
+
+  # Generate test-set class predictions:
+  preds_class <- predict(glm_out,
+                         newdata = dt_df[test, , drop = FALSE],
+                         type = "class")
+
+  # True labels matrix
+  # Logit
   if(length(unique(y)) == 2){
-
-    # Fit model
-    glm_out <- glm(formula = paste0(vars[1],
-                                    " ~ ",
-                                    paste0(vars[-1], collapse = " + ")),
-                   family = binomial(link='logit'),
-                   data = dt_df[train, ])
-
-    # Generate test-set predictions (i.e., y-hats):
-    preds <- predict(glm_out, newdata = dt_df[test, ], type = "response")
-
-    # Structure it as a matrix for consistency with multinom results
-    preds <- matrix(preds, ncol = 1)
-
-    # True labels matrix
+    # Store outcome as 0 and 1s
     p <- model.matrix( ~ ., dt_df[test, 1, drop = FALSE])[, -1, drop = FALSE]
 
+    # Make sure probs are stored as matrix for consistenty with multinom obj
+    preds_probs <- matrix(preds_probs, ncol = 1)
   }
-
-  ## Multinomial
+  # Multinomial
   if(length(unique(y)) > 2){
-
-    # Fit model
-    glm_out <- multinom(paste0(vars[1],
-                               " ~ ",
-                               paste0(vars[-1], collapse = " + ")),
-                        data = dt_df[train, ]) # saturated model
-
-    # Generate test-set predictions (i.e., y-hats):
-    preds <- predict(glm_out,
-                     newdata = dt_df[test, , drop = FALSE],
-                     type = "probs")
-
-    # True labels matrix
-    p = tab.disjonctif(dt_df[test, 1, drop = FALSE])
-
+    # Store outcome as 0 and 1s
+    p <- tab.disjonctif(dt_df[test, 1, drop = FALSE])
   }
 
   # Compute test-set cross-entropy:
