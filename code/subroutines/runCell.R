@@ -27,7 +27,7 @@ runCell <- function(cond,
 
   bs_dt <- bootstrapSample(
     dt = EVS2017,
-    train_p = .8
+    test = 100L
   )
 
   # Drop empty factor level (if the bootstrap sample happens to have them)
