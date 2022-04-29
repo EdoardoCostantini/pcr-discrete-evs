@@ -1,7 +1,8 @@
-# Project:  pcr_discrete_evs
-# Author:   Edoardo Costantini
-# Created:  2022-04-06
-# Modified: 2022-04-28
+# Project:   pcr_discrete_evs
+# Objective: Clean and prepare EVS data
+# Author:    Edoardo Costantini
+# Created:   2022-04-06
+# Modified:  2022-04-29
 
 # Environment ------------------------------------------------------------------
 
