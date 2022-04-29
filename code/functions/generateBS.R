@@ -4,23 +4,24 @@
 # Created:   2022-04-20
 # Modified:  2022-04-29
 
-bootstrapSample <- function(dt, test = .8) {
+bootstrapSample <- function(dt, ss = nrow(dt), test = .8) {
   # Internals -------------------------------------------------------------
 
   # dt = readRDS("../input/ZA7500_processed.rds")
+  # ss = nrow(dt) # sample size
   # test = .1   # proportion of data to be used as training
   # test = 100L # number of data units to be used as training
 
   # Body ------------------------------------------------------------------
 
   # Sample rows
-  bs_index <- sample(1:nrow(dt), size = nrow(dt), replace = TRUE)
+  bs_index <- sample(1:nrow(dt), size = ss, replace = TRUE)
 
   # Keep rows of data based on bs_index
   bs_dt <- dt[bs_index, ]
 
   # Define an indexing for partitioning
-  ind   <- sample(1 : nrow(dt))
+  ind   <- sample(1 : nrow(bs_dt))
 
   # Define the number of test cases
   if(is.integer(test)){
