@@ -4,7 +4,7 @@
 # Created:   2021-10-19
 # Modified:  2022-04-20
 
-extractPCs <- function(dt = matrix(), keep = 1L, index_cont, index_disc, coding){
+extractPCs <- function(in_dt = matrix(), keep = 1L, index_cont, index_disc, coding){
 # Description -------------------------------------------------------------
 
   # Given a data set A in matrix for, it extracts the first keep principal
@@ -17,7 +17,7 @@ extractPCs <- function(dt = matrix(), keep = 1L, index_cont, index_disc, coding)
 
 # Internals ---------------------------------------------------------------
 
-  # dt = dat_disc # MASS::mvrnorm(1e2, rep(0, 3), diag(3))
+  # in_dt = dat_disc # MASS::mvrnorm(1e2, rep(0, 3), diag(3))
   # keep = c("naf", "nkaiser", ".8", "3")[1] # how should we decide what pcs to keep?
   # coding = "dummy"
 
@@ -26,26 +26,26 @@ extractPCs <- function(dt = matrix(), keep = 1L, index_cont, index_disc, coding)
   # Codings
 
   # Define indexing objects for variable types
-  dt_quanti <- dt[, index_cont, drop = FALSE]
-  dt_quali  <- dt[, index_disc, drop = FALSE]
+  dt_quanti <- in_dt[, index_cont, drop = FALSE]
+  dt_quali  <- in_dt[, index_disc, drop = FALSE]
 
   # dummy
   if(coding == "dummy"){
-    dt <- cbind(dt_quanti,
+    in_dt <- cbind(dt_quanti,
                 model.matrix(~ ., dt_quali)[, -1])
   }
 
   # disjunctive
   if(coding == "disj"){
-    dt <- cbind(dt_quanti,
+    in_dt <- cbind(dt_quanti,
                 tab.disjonctif(dt_quali))
   }
 
   # Make sure data is scaled
-  dt <- scale(dt)
+  sc_dt <- scale(in_dt)
 
   # SVD decomposition
-  svd_out <- svd(dt)
+  svd_out <- svd(sc_dt)
 
   # Compute the PC scores
   T <- (svd_out$u %*% diag(svd_out$d))

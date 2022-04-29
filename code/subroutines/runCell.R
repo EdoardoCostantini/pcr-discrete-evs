@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-28
+# Modified: 2022-04-29
 # Note:     A "cell" is a cycle through the set of conditions.
 #           The function in this script generates 1 data set, performs
 #           imputations for every condition in the set.
@@ -66,7 +66,7 @@ runCell <- function(cond,
 
   # continuous + categorical (PCAmix)
   pcs_mix_pcamix <- extractPCAmix(
-    dt = dt_mix[, -dv_index],
+    in_dt = dt_mix[, -dv_index],
     index_cont = c(
       var_types$ord,
       var_types$cnts
@@ -80,7 +80,7 @@ runCell <- function(cond,
 
   # continuous + categorical (dummy)
   pcs_mix_dummy <- extractPCs(
-    dt = dt_mix[, -dv_index],
+    in_dt = dt_mix[, -dv_index],
     index_cont = c(
       var_types$bin,
       var_types$ord,
@@ -93,7 +93,7 @@ runCell <- function(cond,
 
   # continuous + categorical (disjunctive)
   pcs_mix_disj <- extractPCs(
-    dt = dt_mix[, -dv_index],
+    in_dt = dt_mix[, -dv_index],
     index_cont = c(
       var_types$bin,
       var_types$ord,
@@ -106,7 +106,7 @@ runCell <- function(cond,
 
   # all categorical (PCAmix)
   pcs_cat_mca <- extractPCAmix(
-    dt = dt_cat[, -dv_index],
+    in_dt = dt_cat[, -dv_index],
     index_cont = NULL,
     index_disc = c(
       var_types$bin,
@@ -119,7 +119,7 @@ runCell <- function(cond,
 
   # all categorical (dummy)
   pcs_cat_dummy <- extractPCs(
-    dt = dt_cat[, -dv_index],
+    in_dt = dt_cat[, -dv_index],
     index_cont = NULL,
     index_disc = c(
       var_types$cat,
@@ -133,7 +133,7 @@ runCell <- function(cond,
 
   # all categorical (disjunctive)
   pcs_cat_disj <- extractPCs(
-    dt = dt_cat[, -dv_index],
+    in_dt = dt_cat[, -dv_index],
     index_cont = NULL,
     index_disc = c(
       var_types$cat,

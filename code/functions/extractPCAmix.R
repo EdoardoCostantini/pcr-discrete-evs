@@ -2,12 +2,12 @@
 # Objective: extract PCs with the PCAmix method
 # Author:    Edoardo Costantini
 # Created:   2022-01-16
-# Modified:  2022-04-20
+# Modified:  2022-04-29
 
-extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
+extractPCAmix <- function(in_dt = matrix(), keep = 1L, index_cont, index_disc) {
 # Internals ---------------------------------------------------------------
 
-  # dt = dat_disc # MASS::mvrnorm(1e2, rep(0, 10), diag(10))
+  # in_dt = dat_disc # MASS::mvrnorm(1e2, rep(0, 10), diag(10))
   # keep = .9 # either and integer specifying the number of components or a
   #           # double specifying the proportion of variance explained that
   #           # should be kept
@@ -16,8 +16,8 @@ extractPCAmix <- function(dt = matrix(), keep = 1L, index_cont, index_disc) {
 
 # Body --------------------------------------------------------------------
   # Define indexing objects for variable types
-  dt_quanti <- dt[, index_cont, drop = FALSE]
-  dt_quali  <- dt[, index_disc, drop = FALSE]
+  dt_quanti <- in_dt[, index_cont, drop = FALSE]
+  dt_quali  <- in_dt[, index_disc, drop = FALSE]
 
   # Compute the max number of dimensions
   maxdim <- ncol(dt_quanti) + ncol(tab.disjonctif(dt_quali))
