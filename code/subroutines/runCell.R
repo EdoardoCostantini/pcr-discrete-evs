@@ -165,23 +165,22 @@ runCell <- function(cond,
   r2 <- lapply(pcs_list, "[[", "r2")
 
   # PCR MSE
-  mses <- lapply(dts_pcs, extractMSE,
+  mses <- sapply(dts_pcs, extractMSE,
     y = as.numeric(bs_dt$dt[, parms$DVs$num]),
     train = bs_dt$train, test = bs_dt$test
   )
 
   # PCR binary centropy
-  centropy_bin <- lapply(dts_pcs, extractCentropy,
+  centropy_bin <- sapply(dts_pcs, extractCentropy,
     y = bs_dt$dt[, parms$DVs$bin],
     train = bs_dt$train, test = bs_dt$test
   )
 
   # PCR categorical centropy
-  centropy_cat <- lapply(dts_pcs, extractCentropy,
+  centropy_cat <- sapply(dts_pcs, extractCentropy,
     y = bs_dt$dt[, parms$DVs$cat],
     train = bs_dt$train, test = bs_dt$test
   )
-
 
   # Store Output ------------------------------------------------------------
 
