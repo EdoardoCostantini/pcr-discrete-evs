@@ -2,15 +2,15 @@
 # Objective: Subroutine doRep (windows parallelization framework)
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-01-25
+# Modified:  2022-04-29
 
-## Make sure we have a clean environment:
+# Make sure we have a clean environment:
 rm(list = ls())
 
-## Initialize the environment:
+# Initialize the environment:
 source("./init.R")
 
-## Prepare storing results
+# Prepare storing results
 source("./fs.R")
 
 ## Progress report file
