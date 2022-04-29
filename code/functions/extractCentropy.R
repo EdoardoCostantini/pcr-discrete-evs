@@ -2,7 +2,7 @@
 # Objective: Function to fit glm and extract test data cross-entropy
 # Author:    Edoardo Costantini
 # Created:   2022-04-22
-# Modified:  2022-04-22
+# Modified:  2022-04-29
 
 extractCentropy <- function(y = vector(),
                             x = matrix(),
@@ -10,10 +10,15 @@ extractCentropy <- function(y = vector(),
                             test = vector("integer")) {
   # Internals -------------------------------------------------------------
 
+  ## Example with binary data
+  # x = mtcars[, -9]
+  # y = mtcars[, 9]
+  ## Example with multicategorical variable
   # x = iris[, -5]
   # y = iris[, 5]
-  # x = dts_pcs[[1]] mtcars[, -9]
-  # y = mtcars[, 9]
+  ## Example with study data
+  # x = dts_pcs[[1]]
+  # y = bs_dt$dt[, parms$DVs$bin]
   # ind   = sample(1 : nrow(x))
   # train = ind[1 : (.9*nrow(x))]
   # test  = ind[(.9*nrow(x)+1) : nrow(x)]
