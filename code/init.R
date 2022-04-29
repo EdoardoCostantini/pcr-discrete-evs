@@ -2,7 +2,7 @@
 # Objective: Defining Fixed Parameters
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-04-22
+# Modified:  2022-04-29
 
 # Packages ----------------------------------------------------------------
 
@@ -53,9 +53,9 @@
   parms$nStreams <- 1000
 
   # Data generation
-  parms$DVs <- list(num = "v154",
-                    bin = "v112",
-                    cat = "v261")
+  parms$DVs <- list(num = "v154", # abortion justified? 10 ordered cats
+                    bin = "v112", # would you fight for country
+                    cat = "v243_ISCED_1") # educational level
 
 # Load and prepare inputs
 
