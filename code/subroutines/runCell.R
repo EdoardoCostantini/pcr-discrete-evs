@@ -152,13 +152,13 @@ runCell <- function(cond,
   dts_pcs <- lapply(pcs_list, "[[", "T")
 
   # Extract number of PCs extracted
-  npcs <- lapply(pcs_list, "[[", "npcs")
+  npcs <- sapply(pcs_list, "[[", "npcs")
 
   # Extract CPVE by the npcs
-  r2 <- lapply(pcs_list, "[[", "r2")
+  r2 <- sapply(pcs_list, "[[", "r2")
 
   # PCR MSE
-  mses <- sapply(dts_pcs, extractMSE,
+  om_cont <- sapply(dts_pcs, extractMSE,
     y = as.numeric(bs_dt$dt[, parms$DVs$num]),
     train = bs_dt$train, test = bs_dt$test
   )
@@ -175,12 +175,25 @@ runCell <- function(cond,
     train = bs_dt$train, test = bs_dt$test
   )
 
+  # Improve names
+  rownames(om_binary) <- paste0("bin_", rownames(om_binary))
+  rownames(om_categos) <- paste0("cat_", rownames(om_categos))
+
   # Store Output ------------------------------------------------------------
 
-  ## Define storing object
-  output <- cbind(cond, npcs = npcs, r2 = r2, cors = cors, mses = mses)
+  # Define storing object
+  output <- cbind(npcs = drop(npcs),
+                  r2 = drop(r2),
+                  om_cont = om_cont,
+                  om_binary = t(om_binary),
+                  om_categos = t(om_categos))
 
-  ## Return it
+  # Append condition tag and method
+  output <- data.frame(cond = cond$tag,
+                       method = rownames(output),
+                       output)
+
+  # Return it
   saveRDS(output,
     file = paste0(
       fs$outDir,
