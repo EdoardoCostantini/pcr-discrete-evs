@@ -48,19 +48,8 @@ runCell <- function(cond,
     dt_mix[, j] <- as.numeric(dt_mix[, j])
   }
 
-  # Transform binary variables to numeric 0, 1
-  for (j in var_types$bin) {
-    dt_mix[, j] <- as.numeric(dt_mix[, j]) - 1
-  }
-
-  # Define the dependent variable
-  dv_name <- var_types$bin[1]
-
-  # Get rid of it from the vector of variables to avoid confusion down the line
-  var_types$bin <- var_types$bin[-1]
-
   # Extract the index for this variable in the columns of the dataset
-  dv_index <- which(colnames(bs_dt$dt) %in% dv_name)
+  dv_index <- which(colnames(bs_dt$dt) %in% unlist(parms$DVs))
 
   # Analysis ----------------------------------------------------------------
 

@@ -53,9 +53,9 @@
   parms$nStreams <- 1000
 
   # Data generation
-  parms$DVs <- list(num = "v102",
-                    bin = "v10",
-                    cat = "v244")
+  parms$DVs <- list(num = "v154",
+                    bin = "v112",
+                    cat = "v261")
 
 # Load and prepare inputs
 
