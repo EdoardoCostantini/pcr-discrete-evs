@@ -62,6 +62,7 @@ rsconnect/
 # Ignore output/console folder
 /output/console
 /output/*.txt
+/docs/EVS-prediction-papers/
 
 # Ignore folder with notes
 /notes/data_notes
