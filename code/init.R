@@ -2,7 +2,7 @@
 # Objective: Defining Fixed Parameters
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-04-29
+# Modified:  2022-05-02
 
 # Packages ----------------------------------------------------------------
 
@@ -52,11 +52,6 @@
   parms$seed     <- 2021
   parms$nStreams <- 1000
 
-  # Data generation
-  parms$DVs <- list(num = "v154", # abortion justified? 10 ordered cats
-                    bin = "v112", # would you fight for country
-                    cat = "v243_ISCED_1") # educational level
-
 # Load and prepare inputs
 
   # Load pre-processed EVS data
@@ -65,12 +60,17 @@
   # Load variables type description
   var_types <- readRDS("../input/var_types.rds")
 
-  # Get rid of DVs from the variable type object
-  var_types <- lapply(var_types, function (x){
-    x[!x %in% unlist(parms$DVs)]
-  })
-
 # Experimental Conditions -------------------------------------------------
+
+  # Variable to predict
+  dv <- c(
+    num = "v174_LR", # left right voting
+    bin = "v31",     # most people can be trusted yes / no
+    cat = "v261"     # marital status
+    # num = "v160",  # prostitution justified? 10 ordered cats
+    # bin = "v112",  # would you fight for country
+    # cat = "v243_ISCED_1" # educational level
+  )
 
   # Number of components kept by the PCA extraction
   npcs <- c("naf", "nkaiser",       # non-graphical screeplot solutions
@@ -80,7 +80,8 @@
             parms$P)                # least summary
 
   # Make Conditionsa
-  conds <- expand.grid(npcs = npcs,
+  conds <- expand.grid(dv = dv,
+                       npcs = npcs,
                        stringsAsFactors = TRUE)
 
   # Append Condition Tag

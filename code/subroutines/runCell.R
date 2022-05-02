@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-04-29
+# Modified: 2022-05-02
 # Note:     A "cell" is a cycle through the set of conditions.
 #           The function in this script generates 1 data set, performs
 #           imputations for every condition in the set.
@@ -30,6 +30,11 @@ runCell <- function(cond,
     test = 100L
   )
 
+  # Get rid of DVs from the variable type object
+  var_types_r <- lapply(var_types, function (x){
+    x[!x %in% as.character(cond$dv)]
+  })
+
   # Drop empty factor level (if the bootstrap sample happens to have them)
   for (j in 1:ncol(bs_dt$dt)) {
     if (is.factor(bs_dt$dt[, j])) {
@@ -44,7 +49,7 @@ runCell <- function(cond,
   dt_mix <- bs_dt$dt
 
   # Transform ordinal variables to numeric (polarity not important in this project)
-  for (j in c(var_types$ord, var_types$cnts)) {
+  for (j in c(var_types_r$ord, var_types_r$cnts)) {
     dt_mix[, j] <- as.numeric(dt_mix[, j])
   }
 
@@ -57,12 +62,12 @@ runCell <- function(cond,
   pcs_mix_pcamix <- extractPCAmix(
     in_dt = dt_mix[, -dv_index],
     index_cont = c(
-      var_types$ord,
-      var_types$cnts
+      var_types_r$ord,
+      var_types_r$cnts
     ),
     index_disc = c(
-      var_types$bin,
-      var_types$cat
+      var_types_r$bin,
+      var_types_r$cat
     ),
     keep = as.character(cond$npcs)
   )
@@ -71,12 +76,12 @@ runCell <- function(cond,
   pcs_mix_dummy <- extractPCs(
     in_dt = dt_mix[, -dv_index],
     index_cont = c(
-      var_types$ord,
-      var_types$cnts
+      var_types_r$ord,
+      var_types_r$cnts
     ),
     index_disc = c(
-      var_types$bin,
-      var_types$cat
+      var_types_r$bin,
+      var_types_r$cat
     ),
     keep = as.character(cond$npcs),
     coding = "dummy"
@@ -86,12 +91,12 @@ runCell <- function(cond,
   pcs_mix_disj <- extractPCs(
     in_dt = dt_mix[, -dv_index],
     index_cont = c(
-      var_types$ord,
-      var_types$cnts
+      var_types_r$ord,
+      var_types_r$cnts
     ),
     index_disc = c(
-      var_types$bin,
-      var_types$cat
+      var_types_r$bin,
+      var_types_r$cat
     ),
     keep = as.character(cond$npcs),
     coding = "disj"
@@ -102,10 +107,10 @@ runCell <- function(cond,
     in_dt = dt_cat[, -dv_index],
     index_cont = NULL,
     index_disc = c(
-      var_types$bin,
-      var_types$ord,
-      var_types$cnts,
-      var_types$cat
+      var_types_r$bin,
+      var_types_r$ord,
+      var_types_r$cnts,
+      var_types_r$cat
     ),
     keep = as.character(cond$npcs)
   )
@@ -115,10 +120,10 @@ runCell <- function(cond,
     in_dt = dt_cat[, -dv_index],
     index_cont = NULL,
     index_disc = c(
-      var_types$cat,
-      var_types$bin,
-      var_types$ord,
-      var_types$cnts
+      var_types_r$cat,
+      var_types_r$bin,
+      var_types_r$ord,
+      var_types_r$cnts
     ),
     keep = as.character(cond$npcs),
     coding = "dummy"
@@ -129,10 +134,10 @@ runCell <- function(cond,
     in_dt = dt_cat[, -dv_index],
     index_cont = NULL,
     index_disc = c(
-      var_types$cat,
-      var_types$bin,
-      var_types$ord,
-      var_types$cnts
+      var_types_r$cat,
+      var_types_r$bin,
+      var_types_r$ord,
+      var_types_r$cnts
     ),
     keep = as.character(cond$npcs),
     coding = "disj"
