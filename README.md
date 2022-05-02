@@ -21,12 +21,22 @@ I compared the following coding schemes:
   - **Disjunctive table**: the PCs are extracted from a design matrix combining the data treated as continuous with the complete disjunctive table of the discrete variables.
   - **PCAmix**: the PCs are extracted from a design matrix combining the data treated as continuous with the disjunctive table of the categorical data, but scaling is performed as described by [Chavent et. al. (2017)](https://arxiv.org/abs/1411.4911).
 
+### Variables to be predicted
+
+I wanted to assess the predictive performance for three types of variables:
+
+- numerical - Any 10 points 'feeling thermometer' is usually treated as continuous by researchers working with questionnaires. I chose to predict 'political party: appeals to you most: left/right scale (Q49)' (v174_LR) as it is a 10-points item that is reasonably normally distributed. 
+- binary - Any variable recording a yes / no opinion would work. Social 'trust' is often a construct of interest to researchers using EVS data. Therefore, I chose to predict the response the agreement with the statement that most people can be trusted (v31). An example paper trying to predict this variable can be found [here](https://doi.org/10.1177/1948550621999272).
+- categorical - Any variable recording membership of the respondents to a group could be used.
+I decided to use the income group to which individuals belong as a dependent variable for this predictive task. 
+This variable could have been used as an ordinal item, but its close-to-uniform distribution in the EVS data makes the categorical treatment preferable. 
+
 ### Outcome measures
 
 I compared the prediction error obtained by using the differently extracted PCs based on:
 
-- **means squared error** (MSE):  
-- **[cross-entropy](https://rpubs.com/juanhklopper/cross_entropy)** (centropy)  
+- **means squared error** (MSE) for the prediciton of the numerical variable;
+- **[cross-entropy](https://rpubs.com/juanhklopper/cross_entropy)** (centropy) for the predictino of the binary and multi-categorical variables.
 
 ## Repository structure
 
