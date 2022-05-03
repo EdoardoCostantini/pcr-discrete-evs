@@ -1,8 +1,8 @@
-# Title:    Pooling results
-# Author:   Edoardo Costantini
-# Project:  Ordinality
-# Created:  2021-06-10
-# Modified: 2022-01-25
+# Project:   pcr_discrete_evs
+# Objective: Script to pool the rds files together
+# Author:    Edoardo Costantini
+# Created:   2022-04-29
+# Modified:  2022-04-29
 
   ## Make sure we have a clean environment:
   rm(list = ls())
@@ -13,7 +13,7 @@
 # Load Results ----------------------------------------------------------
 
   inDir <- "../output/"
-  target_tar <- "20220125_143543.tar.gz"
+  target_tar <- "20220503_113756.tar.gz"
   output <- readTarGz(target_tar)
 
 # Restructure Results -----------------------------------------------------
@@ -22,8 +22,13 @@
   # Give unique name to all objects
   names(output$out) <- output$file_names
 
+  # Separate errors and good results
+  idx_errors <- grep("ERROR", output$file_names)
+  output_scc <- output$out[-idx_errors]
+  output_err <- output$out[idx_errors]
+
   # Punt into a single data.frame
-  out <- do.call(rbind, output$out)
+  out <- do.call(rbind, output_scc)
 
   # Store
   saveRDS(out,
@@ -34,7 +39,7 @@
   )
 
   # Read
-  file_name <- grep("out", list.files(inDir), value = TRUE)[4]
+  file_name <- grep("out", list.files(inDir), value = TRUE)[1]
   run_name <- gsub("_out.rds", "", file_name)
   out <- readRDS(paste0("../output/", file_name))
 
