@@ -12,14 +12,14 @@ The evaluation is performed using [EVS](https://europeanvaluesstudy.eu) data as 
 
 I compared the following coding schemes:
 
-- **Categorical treatment**: all variables are treated as categorical.
-  - **Dummy**: the PCs are extracted from the design matrix with dummy codes of the discrete variables.
-  - **disjunctive table**: the PC are extracted from the complete [disjunctive table](https://www.xlstat.com/en/solutions/features/complete-disjuncive-tables-creating-dummy-variables) of the discrete variables. The disjunctive table creates a dummy variable *for each* category of the discrete variable. This method is also known as *Filmer–Pritchett*.
-  - **MCA**: the PCs are extracted by applying standard Correspondence Analysis (CA) to the disjunctive table of the data.
-- **Mixed data treatment**: binary, ordinal, and count data are treated as continuous; categorical data data treated as categorical data.
+- **Mixed data treatment**: ordinal, and count data are treated as continuous, while binary and categorical data data treated as categorical data.
   - **Dummy**: the PCs are extracted from a design matrix combining the data treated as continuous with dummy codes of the discrete variables.
   - **Disjunctive table**: the PCs are extracted from a design matrix combining the data treated as continuous with the complete disjunctive table of the discrete variables.
   - **PCAmix**: the PCs are extracted from a design matrix combining the data treated as continuous with the disjunctive table of the categorical data, but scaling is performed as described by [Chavent et. al. (2017)](https://arxiv.org/abs/1411.4911).
+- **Categorical treatment**: all variables are treated as categorical.
+  - **Dummy**: the PCs are extracted from the design matrix with dummy codes of the discrete variables.
+  - **Disjunctive table**: the PC are extracted from the complete [disjunctive table](https://www.xlstat.com/en/solutions/features/complete-disjuncive-tables-creating-dummy-variables) of the discrete variables. The disjunctive table creates a dummy variable *for each* category of the discrete variable. This method is also known as *Filmer–Pritchett*.
+  - **MCA**: the PCs are extracted by applying standard Correspondence Analysis (CA) to the disjunctive table of the data.
 
 ### Variables to be predicted
 
@@ -28,15 +28,16 @@ I wanted to assess the predictive performance for three types of variables:
 - numerical - Any 10 points 'feeling thermometer' is usually treated as continuous by researchers working with questionnaires. I chose to predict 'political party: appeals to you most: left/right scale (Q49)' (v174_LR) as it is a 10-points item that is reasonably normally distributed. 
 - binary - Any variable recording a yes / no opinion would work. Social 'trust' is often a construct of interest to researchers using EVS data. Therefore, I chose to predict the response the agreement with the statement that most people can be trusted (v31). An example paper trying to predict this variable can be found [here](https://doi.org/10.1177/1948550621999272).
 - categorical - Any variable recording membership of the respondents to a group could be used.
-I decided to use the income group to which individuals belong as a dependent variable for this predictive task. 
+I decided to use the income group to which individuals belong as a dependent variable for this predictive task (the item name in the EVS data set is 'households total net income (Q98) (standardized)', the variable name is 'v261'). 
 This variable could have been used as an ordinal item, but its close-to-uniform distribution in the EVS data makes the categorical treatment preferable. 
 
 ### Outcome measures
 
 I compared the prediction error obtained by using the differently extracted PCs based on:
 
-- **means squared error** (MSE) for the prediciton of the numerical variable;
-- **[cross-entropy](https://rpubs.com/juanhklopper/cross_entropy)** (centropy) for the predictino of the binary and multi-categorical variables.
+- **means squared error** (MSE) for the prediction of the numerical variable;
+- **[cross-entropy](https://rpubs.com/juanhklopper/cross_entropy)** (centropy) for the prediction of the binary and multi-categorical variables.
+- **accuracy** of the prediction class computed as the proportion of correctly classified cases
 
 ## Repository structure
 
