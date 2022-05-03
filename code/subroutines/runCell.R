@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-05-02
+# Modified: 2022-05-03
 # Note:     A "cell" is a cycle through the set of conditions.
 #           The function in this script generates 1 data set, performs
 #           imputations for every condition in the set.
@@ -18,12 +18,6 @@ runCell <- function(cond,
   # rp = 1
 
   # Data Generation ---------------------------------------------------------
-
-  # TEMP GET RID OF CONSTANTS
-  var_types$bin <- var_types$bin[!var_types$bin %in% c("v227", "v230", "v232")]
-  index <- which(colnames(EVS2017) %in% c("v227", "v230", "v232")) # in the small toy sample these are constants
-
-  set.seed(1234)
 
   bs_dt <- bootstrapSample(
     dt   = EVS2017,
@@ -60,7 +54,7 @@ runCell <- function(cond,
   }
 
   # Extract the index for this variable in the columns of the dataset
-  dv_index <- which(colnames(bs_dt$dt) %in% unlist(parms$DVs))
+  dv_index <- which(colnames(bs_dt$dt) %in% cond$dv)
 
   # Analysis ----------------------------------------------------------------
 
@@ -226,7 +220,7 @@ runCell <- function(cond,
   # Store Output ------------------------------------------------------------
 
   # Return it
-  saveRDS(output,
+  saveRDS(res,
     file = paste0(
       fs$outDir,
       "rep", rp,
