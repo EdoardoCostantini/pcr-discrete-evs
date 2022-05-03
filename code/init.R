@@ -84,7 +84,7 @@
   # Make Conditionsa
   conds <- expand.grid(dv = dv,
                        npcs = npcs,
-                       stringsAsFactors = TRUE)
+                       stringsAsFactors = FALSE)
 
   # Append Condition Tag
   conds$tag <- sapply(1:nrow(conds), function(i) {
