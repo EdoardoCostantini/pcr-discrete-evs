@@ -56,11 +56,11 @@
   parms    <- list()
 
   # Simulation parameter
-  parms$ss       <- 2e3 # bootstrap sample size
-  parms$dt_rep   <- 1e3 # number of data repetitionsù
-  parms$seed     <- 2021
+  parms$ss       <- nrow(EVS2017)  # bootstrap sample size
+  parms$test     <- 100L # test data set sample size
+  parms$dt_rep   <- 5e2  # number of data repetitions
+  parms$seed     <- 20220503
   parms$nStreams <- 1000
-
 
 # Experimental Conditions -------------------------------------------------
 
@@ -68,10 +68,7 @@
   dv <- c(
     num = "v174_LR", # left right voting
     bin = "v31",     # most people can be trusted yes / no
-    cat = "v261"     # marital status
-    # num = "v160",  # prostitution justified? 10 ordered cats
-    # bin = "v112",  # would you fight for country
-    # cat = "v243_ISCED_1" # educational level
+    cat = "v261"     # households total net income (Q98) (standardized)
   )
 
   # Number of components kept by the PCA extraction
