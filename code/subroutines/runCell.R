@@ -26,7 +26,8 @@ runCell <- function(cond,
   set.seed(1234)
 
   bs_dt <- bootstrapSample(
-    dt = EVS2017,
+    dt   = EVS2017,
+    ss   = parms$ss,
     test = 100L
   )
 

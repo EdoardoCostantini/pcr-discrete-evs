@@ -2,7 +2,7 @@
 # Objective: Defining Fixed Parameters
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-05-02
+# Modified:  2022-05-03
 
 # Packages ----------------------------------------------------------------
 
@@ -44,14 +44,6 @@
 
 # Fixed Parameters --------------------------------------------------------
 
-  # Empty List
-  parms    <- list()
-
-  # Simulation parameter
-  parms$dt_rep   <- 1e3 # number of data repetitionsù
-  parms$seed     <- 2021
-  parms$nStreams <- 1000
-
 # Load and prepare inputs
 
   # Load pre-processed EVS data
@@ -59,6 +51,16 @@
 
   # Load variables type description
   var_types <- readRDS("../input/var_types.rds")
+
+  # Create empty list to store parameters
+  parms    <- list()
+
+  # Simulation parameter
+  parms$ss       <- 2e3 # bootstrap sample size
+  parms$dt_rep   <- 1e3 # number of data repetitionsù
+  parms$seed     <- 2021
+  parms$nStreams <- 1000
+
 
 # Experimental Conditions -------------------------------------------------
 
