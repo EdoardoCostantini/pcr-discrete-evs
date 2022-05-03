@@ -30,6 +30,11 @@ runCell <- function(cond,
     test = 100L
   )
 
+  # Define the type of prediction we are doing in this condition
+  dv_type <- sapply(var_types, function (x){ sum(x %in% cond$dv) }) != 0
+  dv_type <- names(which(dv_type))
+  pred_type <- ifelse(dv_type == "ord", "lm", "glm")
+
   # Get rid of DVs from the variable type object
   var_types_r <- lapply(var_types, function (x){
     x[!x %in% as.character(cond$dv)]
@@ -162,41 +167,62 @@ runCell <- function(cond,
   # Extract CPVE by the npcs
   r2 <- sapply(pcs_list, "[[", "r2")
 
-  # PCR MSE
-  om_cont <- sapply(dts_pcs, extractMSE,
-    y = as.numeric(bs_dt$dt[, parms$DVs$num]),
-    train = bs_dt$train, test = bs_dt$test
-  )
+  # Get predicitons for each PC type
+  model_preds <- lapply(dts_pcs,
+                        getPreds,
+                        y = as.numeric(bs_dt$dt[, cond$dv]),
+                        train = bs_dt$train,
+                        test = bs_dt$test,
+                        type = pred_type)
 
-  # PCR binary centropy
-  om_binary <- sapply(dts_pcs, extractCatOm,
-    y = bs_dt$dt[, parms$DVs$bin],
-    train = bs_dt$train, test = bs_dt$test
-  )
+  # Extract performance measures
+  if(pred_type == "lm"){
+    # Extract mse
+    mses <- sapply(1:length(model_preds), function (i){
+      MSE(y_pred = model_preds[[i]]$y_true,
+          y_true = model_preds[[i]]$y_hat)
+    })
 
-  # PCR categorical centropy
-  om_categos <- sapply(dts_pcs, extractCatOm,
-    y = bs_dt$dt[, parms$DVs$cat],
-    train = bs_dt$train, test = bs_dt$test
-  )
+    # Structure in a data.frame
+    res <- data.frame(rp = rp,
+                      cond_npcs = cond$npcs,
+                      cond_dv = cond$dv,
+                      method = names(model_preds),
+                      measure = rep(c("mse",
+                                      "npcs",
+                                      "r2"),
+                                    each = length(model_preds)),
+                      value = c(mses, npcs, r2))
+  }
 
-  # Improve names
-  rownames(om_binary) <- paste0("bin_", rownames(om_binary))
-  rownames(om_categos) <- paste0("cat_", rownames(om_categos))
+  if(pred_type == "glm"){
+
+    # Extract cross-entropy
+    centropy <- sapply(1:length(model_preds), function (i){
+      crossEntropy(p = model_preds[[i]]$y_true_mat,
+                   p_hat = model_preds[[i]]$p_hat)
+    })
+
+    # Exrtact classification error
+    cclass <- sapply(1:length(model_preds), function (i){
+      correctClass(y_true = model_preds[[i]]$y_true,
+                   y_hat = model_preds[[i]]$y_hat)
+    })
+
+    # Structure in a data.frame
+    res <- data.frame(rp = rp,
+                      cond_npcs = cond$npcs,
+                      cond_dv = cond$dv,
+                      method = names(model_preds),
+                      measure = rep(c("centropy",
+                                      "cclass",
+                                      "npcs",
+                                      "r2"),
+                                    each = length(model_preds)),
+                      value = c(centropy, cclass, npcs, r2))
+  }
 
   # Store Output ------------------------------------------------------------
-
-  # Define storing object
-  output <- cbind(npcs = drop(npcs),
-                  r2 = drop(r2),
-                  om_cont = om_cont,
-                  om_binary = t(om_binary),
-                  om_categos = t(om_categos))
-
-  # Append condition tag and method
-  output <- data.frame(cond = cond$tag,
-                       method = rownames(output),
-                       output)
 
   # Return it
   saveRDS(output,
