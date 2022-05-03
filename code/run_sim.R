@@ -2,76 +2,83 @@
 # Objective: Subroutine doRep (windows parallelization framework)
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-04-29
+# Modified:  2022-05-03
 
-# Make sure we have a clean environment:
-rm(list = ls())
+# Simulation set up ------------------------------------------------------------
 
-# Initialize the environment:
-source("./init.R")
+  # Make sure we have a clean environment:
+  rm(list = ls())
 
-# Prepare storing results
-source("./fs.R")
+  # Initialize the environment:
+  source("./init.R")
 
-## Progress report file
-dir.create(fs$outDir)
-file.create(paste0(fs$outDir, fs$fileName_prog, ".txt"))
+  # Prepare storing results
+  source("./fs.R")
 
-cat(paste0("SIMULATION PROGRESS REPORT",
-           "\n",
-           "Starts at: ", Sys.time(),
-           "\n", "------", "\n" ),
-    file = paste0(fs$outDir, fs$fileName_prog, ".txt"),
-    sep = "\n",
-    append = TRUE)
+  # Create file system required objects
+  dir.create(fs$outDir)
+  file.create(paste0(fs$outDir, fs$fileName_prog, ".txt"))
 
-## Define repetitions and clusters
-reps <- 1 : 500
-clus <- makeCluster(10)
+  # Initialize report txt file
+  cat(paste0("SIMULATION PROGRESS REPORT",
+             "\n",
+             "Starts at: ", Sys.time(),
+             "\n", "------", "\n" ),
+      file = paste0(fs$outDir, fs$fileName_prog, ".txt"),
+      sep = "\n",
+      append = TRUE)
 
-## Export to worker nodes
-# export fs object from the global env
-clusterExport(cl = clus, varlist = "fs", envir = .GlobalEnv)
-# export script to be executed
-clusterEvalQ(cl = clus, expr = source("./init.R"))
+  # Define repetitions and clusters
+  reps <- 1 : 500
+  clus <- makeCluster(15)
 
-# mcApply parallel --------------------------------------------------------
+  # export fs object from the global env to worker nodes
+  clusterExport(cl = clus, varlist = "fs", envir = .GlobalEnv)
 
-sim_start <- Sys.time()
+  # export scripts to be executed to worker nodes
+  clusterEvalQ(cl = clus, expr = source("./init.R"))
 
-## Run the computations in parallel on the 'clus' object:
-out <- parLapply(cl    = clus,
-                 X     = reps,
-                 fun   = doRep,
-                 conds = conds,
-                 parms = parms,
-                 fs = fs)
+# Run simulation ---------------------------------------------------------------
 
-## Kill the cluster:
-stopCluster(clus)
+  # Get start of run time
+  sim_start <- Sys.time()
 
-sim_ends <- Sys.time()
+  # Run the computations in parallel on the 'clus' object:
+  out <- parLapply(cl    = clus,
+                   X     = reps,
+                   fun   = doRep,
+                   conds = conds,
+                   parms = parms,
+                   fs = fs)
 
-cat(paste0("\n", "------", "\n",
-           "Ends at: ", Sys.time(), "\n",
-           "Run time: ",
-           round(difftime(sim_ends, sim_start, units = "hours"), 3), " h",
-           "\n", "------", "\n"),
-    file = paste0(fs$outDir, fs$fileName_prog, ".txt"),
-    sep = "\n",
-    append = TRUE)
+  # Kill the cluster:
+  stopCluster(clus)
 
-# Attach Extract Info Objects
-out_support <- list()
-out_support$parms <- parms
-out_support$conds <- conds
-out_support$session_info <- devtools::session_info()
+  # Get end of run time
+  sim_ends <- Sys.time()
+
+  # Close report script
+  cat(paste0("\n", "------", "\n",
+             "Ends at: ", Sys.time(), "\n",
+             "Run time: ",
+             round(difftime(sim_ends, sim_start, units = "hours"), 3), " h",
+             "\n", "------", "\n"),
+      file = paste0(fs$outDir, fs$fileName_prog, ".txt"),
+      sep = "\n",
+      append = TRUE)
+
+# Attach Extract Info Objects --------------------------------------------------
+
+  out_support <- list()
+  out_support$parms <- parms
+  out_support$conds <- conds
+  out_support$session_info <- devtools::session_info()
 
 # Save output -------------------------------------------------------------
 
-saveRDS(out_support,
-        paste0(fs$outDir, "sInfo.rds"))
+  saveRDS(out_support,
+          paste0(fs$outDir, "sInfo.rds"))
 
 # Zip output folder -------------------------------------------------------
 
-writeTarGz(fs$fileName_res)
+  writeTarGz(fs$fileName_res)
