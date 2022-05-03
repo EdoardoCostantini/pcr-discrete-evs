@@ -23,7 +23,7 @@ runCell <- function(cond,
     bs_dt <- bootstrapSample(
       dt   = EVS2017,
       ss   = parms$ss,
-      test = 100L
+      test = parms$test
     )
 
     # Define the type of prediction we are doing in this condition
