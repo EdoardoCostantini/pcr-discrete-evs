@@ -185,10 +185,11 @@ runCell <- function(cond,
                         cond_dv = cond$dv,
                         method = names(model_preds),
                         measure = rep(c("mse",
+                                        "rmse",
                                         "npcs",
                                         "r2"),
                                       each = length(model_preds)),
-                        value = c(mses, npcs, r2))
+                        value = c(mses, sqrt(mses), npcs, r2))
     }
 
     if(pred_type == "glm"){
