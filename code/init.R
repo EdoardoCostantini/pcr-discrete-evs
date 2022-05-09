@@ -2,7 +2,7 @@
 # Objective: Defining Fixed Parameters
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-05-03
+# Modified:  2022-05-09
 
 # Packages ----------------------------------------------------------------
 
@@ -57,7 +57,7 @@
 
   # Simulation parameter
   parms$ss       <- nrow(EVS2017)  # bootstrap sample size
-  parms$test     <- 100L # test data set sample size
+  parms$test     <- .1 # test data set sample size
   parms$dt_rep   <- 5e2  # number of data repetitions
   parms$seed     <- 20220503
   parms$nStreams <- 1000
