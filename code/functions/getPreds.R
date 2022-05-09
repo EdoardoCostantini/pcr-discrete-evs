@@ -2,7 +2,7 @@
 # Objective: function to produce predictions
 # Author:    Edoardo Costantini
 # Created:   2022-05-02
-# Modified:  2022-05-02
+# Modified:  2022-05-09
 
 getPreds <- function(y = vector(),
                      x = matrix(),
@@ -25,7 +25,7 @@ getPreds <- function(y = vector(),
   # type = "glm"
   ## Example with study data
   # x = dts_pcs[[1]]
-  # y = bs_dt$dt[, parms$DVs$bin]
+  # y = bs_dt$dt[, cond$dv]
   # ind   = sample(1 : nrow(x))
   # train = ind[1 : (.9*nrow(x))]
   # test  = ind[(.9*nrow(x)+1) : nrow(x)]
@@ -33,6 +33,10 @@ getPreds <- function(y = vector(),
   # Body -----------------------------------------------------------------------
 
   # 1. prepare data ------------------------------------------------------------
+
+  if(type == "lm"){
+    y <- as.numeric(y)
+  }
 
   # Transform into data frame
   dt_df <- data.frame(y = y, x = x)
@@ -55,20 +59,18 @@ getPreds <- function(y = vector(),
     glm_out <- multinom(paste0(vars[1],
                                " ~ ",
                                paste0(vars[-1], collapse = " + ")),
+                        maxit = 1e3,
                         data = dt_df[train, ])
   }
 
   # 3. Generate predictions ----------------------------------------------------
-
-  # Store true values for the predicted values
-  y_true_test <- dt_df[test, "y"]
 
   if(type == "lm"){
     # Get predictions
     preds <- predict(lm_out, newdata = dt_df[test, ])
 
     # Store empty objects for results irrelevant in the lm case
-    preds_probs <- y_true_test_mat <- NULL
+    preds_probs <- p_true <- NULL
   }
 
   if(type == "glm"){
@@ -83,25 +85,26 @@ getPreds <- function(y = vector(),
                      type = "class")
 
     # True labels matrix
-    if(length(unique(y)) == 2){
+    if(nlevels(y) == 2){
       # Store outcome as 0 and 1s
-      y_true_test_mat <- model.matrix( ~ ., dt_df[test, 1, drop = FALSE])[, -1, drop = FALSE]
+      p_true <- model.matrix( ~ ., dt_df[test, 1, drop = FALSE])[, -1, drop = FALSE]
 
       # Make sure probs are stored as matrix for consistenty with multinom obj
       preds_probs <- matrix(preds_probs, ncol = 1)
     }
     # Multinomial
-    if(length(unique(y)) > 2){
+    if(nlevels(y) > 2){
       # Store outcome as 0 and 1s
-      y_true_test_mat <- tab.disjonctif(dt_df[test, 1, drop = FALSE])
+      p_true <- tab.disjonctif(dt_df[test, 1, drop = FALSE])
     }
   }
 
   # 4. Define returned values --------------------------------------------------
 
-  return(list(y_true = y_true_test,
-              y_true_mat = y_true_test_mat,
+  # Return a list
+  return(list(y_true = dt_df[test, "y"],
               y_hat  = preds,
+              p_true = p_true,
               p_hat  = preds_probs))
 
 }

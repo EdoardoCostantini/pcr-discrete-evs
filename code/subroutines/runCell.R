@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-05-03
+# Modified: 2022-05-09
 # Note:     A "cell" is a cycle through the set of conditions.
 #           The function in this script generates 1 data set, performs
 #           imputations for every condition in the set.
@@ -166,7 +166,7 @@ runCell <- function(cond,
     # Get predicitons for each PC type
     model_preds <- lapply(dts_pcs,
                           getPreds,
-                          y = as.numeric(bs_dt$dt[, cond$dv]),
+                          y = bs_dt$dt[, cond$dv],
                           train = bs_dt$train,
                           test = bs_dt$test,
                           type = pred_type)
@@ -195,7 +195,7 @@ runCell <- function(cond,
 
       # Extract cross-entropy
       centropy <- sapply(1:length(model_preds), function (i){
-        crossEntropy(p = model_preds[[i]]$y_true_mat,
+        crossEntropy(p = model_preds[[i]]$p_true,
                      p_hat = model_preds[[i]]$p_hat)
       })
 
