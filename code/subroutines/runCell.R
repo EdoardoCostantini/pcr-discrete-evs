@@ -1,7 +1,7 @@
 # Project:  pcr_discrete_evs
 # Author:   Edoardo Costantini
 # Created:  2022-04-06
-# Modified: 2022-05-09
+# Modified: 2022-05-12
 # Note:     A "cell" is a cycle through the set of conditions.
 #           The function in this script generates 1 data set, performs
 #           imputations for every condition in the set.
@@ -51,7 +51,16 @@ runCell <- function(cond,
 
     # Transform ordinal variables to numeric (polarity not important in this project)
     for (j in c(var_types_r$ord, var_types_r$cnts)) {
-      dt_mix[, j] <- as.numeric(dt_mix[, j])
+      lvls_char <- grep("[^0-9]", levels(dt_mix[, j]))
+      # If there is a letter in the levels, then as.numeric is the way to
+      # transform a factor into a numeric item.
+      # If there are only numbers in the levels, it is better to take the actual
+      # number as the value, instead of its level position
+      if(length(lvls_char) > 0){
+        dt_mix[, j] <- as.numeric(dt_mix[, j])
+      } else {
+        dt_mix[, j] <- as.numeric(as.character(dt_mix[, j]))
+      }
     }
 
     # Extract the index for this variable in the columns of the dataset
