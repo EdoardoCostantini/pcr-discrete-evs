@@ -2,7 +2,7 @@
 # Objective: function to produce predictions
 # Author:    Edoardo Costantini
 # Created:   2022-05-02
-# Modified:  2022-05-09
+# Modified:  2022-05-12
 
 getPreds <- function(y = vector(),
                      x = matrix(),
@@ -79,24 +79,19 @@ getPreds <- function(y = vector(),
                            newdata = dt_df[test, , drop = FALSE],
                            type = "probs")
 
+    if(nlevels(y) == 2){
+      # Make sure probs are stored as matrix for consistenty with multinom obj
+      preds_probs <- cbind(cat_0 = 1 - preds_probs,
+                           cat_1 = preds_probs)
+    }
+
     # Get predicted class memberships
     preds <- predict(glm_out,
                      newdata = dt_df[test, , drop = FALSE],
                      type = "class")
 
-    # True labels matrix
-    if(nlevels(y) == 2){
-      # Store outcome as 0 and 1s
-      p_true <- model.matrix( ~ ., dt_df[test, 1, drop = FALSE])[, -1, drop = FALSE]
-
-      # Make sure probs are stored as matrix for consistenty with multinom obj
-      preds_probs <- matrix(preds_probs, ncol = 1)
-    }
-    # Multinomial
-    if(nlevels(y) > 2){
-      # Store outcome as 0 and 1s
-      p_true <- tab.disjonctif(dt_df[test, 1, drop = FALSE])
-    }
+    # Store true values
+    p_true <- tab.disjonctif(dt_df[test, 1, drop = FALSE])
   }
 
   # 4. Define returned values --------------------------------------------------
