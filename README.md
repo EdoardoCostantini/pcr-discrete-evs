@@ -28,9 +28,13 @@ I wanted to assess the predictive performance for three types of variables:
 - numerical - Any 10 points 'feeling thermometer' is usually treated as continuous by researchers working with questionnaires. I chose to predict two variables in this group:
   - 'political party: appeals to you most: left/right scale (Q49)' (v174_LR) as it is a 10-points item that is reasonably normally distributed.
   - 'how satisfied are you with your life (Q10)' (v39) a 10-points item with reasonably symmetric distribution
+  
 - binary - Any variable recording a yes / no opinion would work. Social 'trust' is often a construct of interest to researchers using EVS data. Therefore, I chose to predict the response the agreement with the statement that most people can be trusted (v31). An example paper trying to predict this variable can be found [here](https://doi.org/10.1177/1948550621999272).
-- categorical - Any variable recording membership of the respondents to a group could be used.
-I decided to use the income group to which individuals belong as a dependent variable for this predictive task (the item name in the EVS data set is 'households total net income (Q98) (standardized)', the variable name is 'v261'). 
+
+- categorical - Any variable recording membership of the respondents to a group could be used.  I decided to use
+  - 'what group your household is' (v261) the income group to which individuals belong as a dependent variable for this predictive task (the item name in the EVS data set is 'households total net income (Q98) (standardized)', the variable name is 'v261').
+  - 'Which of these statements' comes closest to your beliefs?' (v62): the response to a nominal question on beliefs.
+
 This variable could have been used as an ordinal item, but its close-to-uniform distribution in the EVS data makes the categorical treatment preferable. 
 
 ### Outcome measures

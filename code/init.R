@@ -2,7 +2,7 @@
 # Objective: Defining Fixed Parameters
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-05-12
+# Modified:  2022-05-16
 
 # Packages ----------------------------------------------------------------
 
@@ -69,7 +69,8 @@
     num = "v174_LR", # left right voting
     num = "v39",     # how satisfied are you with your life (Q10)
     bin = "v31",     # most people can be trusted yes / no
-    cat = "v261"     # households total net income (Q98) (standardized)
+    cat = "v261",    # households total net income (Q98) (standardized)
+    cat = "v62"      # statements comes closest to your beliefs (Q98)
   )
 
   # Number of components kept by the PCA extraction
