@@ -58,7 +58,7 @@
   # Simulation parameter
   parms$ss       <- nrow(EVS2017)  # bootstrap sample size
   parms$test     <- .1 # test data set sample size
-  parms$dt_rep   <- 5e2  # number of data repetitions
+  parms$dt_rep   <- 200  # number of data repetitions
   parms$seed     <- 20220503
   parms$nStreams <- 1000
 

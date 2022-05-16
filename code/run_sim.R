@@ -2,7 +2,7 @@
 # Objective: Subroutine doRep (windows parallelization framework)
 # Author:    Edoardo Costantini
 # Created:   2021-06-10
-# Modified:  2022-05-03
+# Modified:  2022-05-16
 
 # Simulation set up ------------------------------------------------------------
 
@@ -29,8 +29,8 @@
       append = TRUE)
 
   # Define repetitions and clusters
-  reps <- 1 : 500
-  clus <- makeCluster(15)
+  reps <- 1 : parms$dt_rep
+  clus <- makeCluster(18)
 
   # export fs object from the global env to worker nodes
   clusterExport(cl = clus, varlist = "fs", envir = .GlobalEnv)
