@@ -9,11 +9,11 @@ extractPCs <- function(in_dt = matrix(), keep = 1L, index_cont, index_disc, codi
 
   # Given a data set A in matrix for, it extracts the first keep principal
   # components from A, and returns a dataset
-  # with the first column of A cobined with the extracted components.
-  # It also retunrs the info regarding the proportion of explained variance
+  # with the first column of A combined with the extracted components.
+  # It also returns the info regarding the proportion of explained variance
   # by the defined number of components
   # when @cor_tupe = "mixed", psych::principal recognizes which variables
-  # need pearson, polyserial, polychoric, tetrachoric correlations
+  # need Pearson, polyserial, polychoric, tetrachoric correlations
 
 # Internals ---------------------------------------------------------------
 

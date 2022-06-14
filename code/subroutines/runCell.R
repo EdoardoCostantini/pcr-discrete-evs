@@ -63,6 +63,16 @@ runCell <- function(cond,
       }
     }
 
+    # Items for polychoric -----------------------------------------------------
+    dt_cho <- dt_mix
+
+    # Transform binary variables to 0 and 1s
+    for (j in var_types_r$bin) {
+      dt_cho[, j] <- as.numeric(dt_cho[, j]) - 1
+    }
+
+    sapply(dt_cho[, var_types_r$ord], function(x) length(unique(x)))
+
     # Extract the index for this variable in the columns of the dataset
     dv_index <- which(colnames(bs_dt$dt) %in% cond$dv)
 

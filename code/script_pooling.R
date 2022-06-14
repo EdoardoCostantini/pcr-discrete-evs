@@ -13,7 +13,8 @@
 # Load Results ----------------------------------------------------------
 
   inDir <- "../output/"
-  target_tar <- "20220503_113756.tar.gz"
+  target_tar <- "20220513_145604.tar.gz"
+  target_tar <- "20220516_150224.tar.gz"
   output <- readTarGz(target_tar)
 
 # Restructure Results -----------------------------------------------------
@@ -39,19 +40,6 @@
   )
 
   # Read
-  file_name <- grep("out", list.files(inDir), value = TRUE)[1]
+  file_name <- grep("out", list.files(inDir), value = TRUE)[3]
   run_name <- gsub("_out.rds", "", file_name)
   out <- readRDS(paste0("../output/", file_name))
-
-  tag_column <- grep("tag", colnames(out))
-
-# Restructure for Box plot ------------------------------------------------
-  gg_shape <- reshape2::melt(out, id.var = colnames(out)[1:tag_column])
-
-  # Save
-  saveRDS(gg_shape,
-          file = paste0("../output/",
-                        output$name_run,
-                        "_box",
-                        ".rds")
-  )
