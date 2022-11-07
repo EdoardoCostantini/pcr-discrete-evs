@@ -32,8 +32,8 @@
 
   # Define which conditions to plot and order of some factors
   target_npcs    <- rev(sort(unique(gg_shape$cond_npcs)))#[c(1:4, 9, 13)]
-  target_dv      <- unique(gg_shape$cond_dv)[5]
-  target_measure <- unique(gg_shape$measure)[c(5)]
+  target_dv      <- unique(gg_shape$cond_dv)[4]
+  target_measure <- unique(gg_shape$measure)[c(2)]
 
   # Define the caption of the plot
   caption <- paste0("Target variable: ", target_dv)
@@ -72,7 +72,7 @@
   # Define which conditions to plot and order of some factors
   target_npcs    <- rev(sort(unique(gg_shape$cond_npcs)))#[c(1:4, 9, 13)]
   target_dv      <- unique(gg_shape$cond_dv)[1]
-  target_measure <- unique(gg_shape$measure)[c(3, 4)]
+  target_measure <- unique(gg_shape$measure)[c(3)]
 
   # Define the caption of the plot
   caption <- paste0("Target variable: ", target_dv)
