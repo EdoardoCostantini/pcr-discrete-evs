@@ -17,9 +17,9 @@ The resampling study procedure involved:
 2. **Computation of the PCs** for the prediction of a target variable $y$ (a set of variables $X$ is prepared and the PCs are computed as their linear combinations)
 3. Compute the **out-of-sample prediction error** (see below for details):
 
-  - means squared error (MSE) for the prediction of numerical/ordinal variables;
-  - [cross-entropy](https://rpubs.com/juanhklopper/cross_entropy) (centropy) for the prediction of the binary and multi-categorical variables;
-- accuracy of the prediction class computed as the proportion of correctly classified cases for the prediction of the binary and multi-categorical variables.
+    - means squared error (MSE) for the prediction of numerical/ordinal variables;
+    - [cross-entropy](https://rpubs.com/juanhklopper/cross_entropy) (centropy) for the prediction of the binary and multi-categorical variables;
+    - accuracy of the prediction class computed as the proportion of correctly classified cases for the prediction of the binary and multi-categorical variables.
 
 ### Coding schemes compared
 
